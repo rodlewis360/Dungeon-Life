@@ -1,2 +1,2 @@
-# Dungeon-Life
+# Dungeon Life
 A dungeon survival game.
