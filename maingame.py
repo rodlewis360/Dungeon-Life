@@ -1,13 +1,15 @@
 def DungeonLife():
     import random
+    monsterskilled = 0
     from time import sleep
     HP = 10
     HPlimit = 10
     enemies = ['snake', 'skeleton', 'spider', 'living jaw']
-    snakeattacks = ['spit poison']
+    snakeattacks = ['spit poison', 'bite']
     skeletonattacks = ['claw', 'shoot', 'back up']
     spiderattacks = ['bite', 'climb']
     livingjawattacks = ['bite']
+    droppables = ['sword', 'healing potion', '', '', '']
     print("You wake up in a dungeon, feeling natious.")
     sleep(2.5)
     print("You wonder why and how you got here, but you cannot worry now, for some reason.")
@@ -22,13 +24,20 @@ def DungeonLife():
     healingpotions = 5
     dice = [1,2]
     while True:
+        if HP < 1:
+            break
         sleep(2.5)
         enemy = random.choice(enemies)
         enemy = 'snake'
         if enemy == 'snake':
             enemieHP = 5
             print("A snake jumps out at you!")
+            poisoned = False
             while enemieHP > 0:
+                if HP < 1:
+                    break
+                if poisoned == True:
+                    HP -= 1
                 sleep(2.5)
                 print("What would you like to do (Melee, Wait, Magic, Flee, or Heal)?")
                 print("You have", HP, "HP out of", HPlimit,".")
@@ -59,6 +68,7 @@ def DungeonLife():
                     HP += 2.5
                 else:
                     print("Remember, Melee, Magic, Wait, or Flee.")
+                sleep(2.5)
                 enemyattack = random.choice(snakeattacks)
                 if enemyattack == 'spit poison':
                     if waited == 1:
@@ -70,4 +80,30 @@ def DungeonLife():
                     else:
                         print("The snake spit poison at you.  It doesn't penetrate your skin, though.")
                         HP -= 1
-                print("You vanquished the snake!")
+                if enemyattack == 'bite':
+                    if waited == 1:
+                        if random.choice(dice) == 1:
+                            print("The snake bit you.  The poison sinks into your vains.")
+                            HP -= 1
+                            poisoned = True
+                        else:
+                            print("Your stamina from waiting helps you dodge the snake as it lashes out.")
+                    else:
+                        print("The snake bit you.  The poison sinks into your vains.")
+                        HP -= 1
+                        poisoned = True
+                if not poisoned == True:
+                    poisoned = False
+            poisoned = False
+            print("You vanquished the snake!")
+            drop = random.choice(droppables)
+            if drop == 'sword':
+                print("You find that the snake has a sword lodged n it from a past hero.  You do not want to think of the terrible fate that he suffered.")
+            if drop == 'healing potion':
+                print("You find a healing potion stuck in the snake's throught.")
+                healthpotions += 1
+        monsterskilled += 1
+        print("You died...")
+        print("You killed", monsterskilled, "monsters.")
+        
+                
