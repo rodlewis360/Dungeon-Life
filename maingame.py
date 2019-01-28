@@ -89,6 +89,9 @@ def DungeonLife():
                     print("You drink 1 health potion.")
                     healthpotions -= 1
                     HP += 2.5
+                    if HP > HPlimit:
+                        healthpotions += 1
+                        HP -= 2.5
                 else:
                     print("Remember, Melee, Magic, Wait, or Flee.")
                 sleep(2.5)
