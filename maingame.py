@@ -9,10 +9,11 @@ def DungeonLife():
     skeletonattacks = ['claw', 'shoot', 'back up']
     spiderattacks = ['bite', 'climb']
     livingjawattacks = ['bite']
-    droppables = ['sword', 'healing potion', '', '', '']
+    droppables = ['sword', 'healing potion', 'armor']
     print("You wake up in a dungeon, feeling natious.")
     sleep(2.5)
     print("You wonder why and how you got here, but you cannot worry now, for some reason.")
+    armor = ''
     sleep(2.5)
     print("You notice that you have a stick strapped to your side.")
     meleeweapon = 'stick'
@@ -21,12 +22,30 @@ def DungeonLife():
     magicweapon = 'fire'
     sleep(2.5)
     print("You have 5 healing potions.")
-    healingpotions = 5
-    dice = [1,2]
+    healthpotions = 5
+    dice = [1, 2]
     while True:
         if HP < 1:
             break
+        if armor == 'armor':
+            HPlimit = 25
+            HP += 15
         sleep(2.5)
+        print("Would you like to heal?")
+        if input() == 'yes':
+            print("How many potions would you like to drink?")
+            drink = input()
+            a = 0
+            if drink > healthpotions:
+                drink = healthpotions
+            healthpotions -= drink
+            print("You drink", drink, "health potions.")
+            while healthpotions > 0 and a < drink:
+                HP += 2.5
+                a += 1
+                if HP > HPlimit:
+                    healthpotions += 1
+                    HP -= 2.5
         enemy = random.choice(enemies)
         enemy = 'snake'
         if enemy == 'snake':
@@ -37,7 +56,7 @@ def DungeonLife():
                 if HP < 1:
                     break
                 if poisoned == True:
-                    HP -= 1
+                    HP -= 0.5
                 sleep(2.5)
                 print("What would you like to do (Melee, Wait, Magic, Flee, or Heal)?")
                 print("You have", HP, "HP out of", HPlimit,".")
@@ -51,15 +70,19 @@ def DungeonLife():
                     else:
                         print("You try to run away, but the snake is blocking the exit.")
                 elif whattodo == 'Melee':
-                    print("Your", meleeweapon, "bounces off the snake's head, but you think you've done some damage.")
                     if meleeweapon == 'stick':
+                        print("Your stick bounces off the snake's head, but you think you've done some damage.")
                         enemieHP -= 1
                         print("The snake loses 1 HP")
+                    if meleeweapon == 'sword':
+                        print("Your sword sends one scale flying, but the snake hisses loudly.")
+                        enemieHP -= 2
+                        print("The snake loses 2 health.")
                 elif whattodo == 'Wait':
                     print("You wait for the snake's attack, hoping to dodge it.")
                     waited = 1
                 elif whattodo == 'Magic':
-                    print("Your magic burns a hole throught the snake.")
+                    print("Your magic burns a hole through the snake.")
                     enemieHP -= 2.5
                     print("The snake loses 2.5 health")
                 elif whattodo == 'Heal':
@@ -98,11 +121,15 @@ def DungeonLife():
             print("You vanquished the snake!")
             drop = random.choice(droppables)
             if drop == 'sword':
-                print("You find that the snake has a sword lodged n it from a past hero.  You do not want to think of the terrible fate that he suffered.")
+                print("You find that the snake has a sword lodged in it from a past hero.  You do not want to think of the terrible fate that he suffered.")
+                meleeweapon = 'sword'
             if drop == 'healing potion':
-                print("You find a healing potion stuck in the snake's throught.")
+                print("You find a healing potion stuck in the snake's throat.")
                 healthpotions += 1
-        monsterskilled += 1
+            if drop == 'armor':
+                print("The snake swallowed a past hero with armor.  You try not to look as you pull it out.")
+                armor = 'armor'
+            monsterskilled += 1
         print("You died...")
         print("You killed", monsterskilled, "monsters.")
         
