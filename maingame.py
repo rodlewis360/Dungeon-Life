@@ -95,6 +95,8 @@ def DungeonLife():
                 else:
                     print("Remember, Melee, Magic, Wait, or Flee.")
                 sleep(2.5)
+                if enemieHP < 1:
+                    break
                 enemyattack = random.choice(snakeattacks)
                 if enemyattack == 'spit poison':
                     if waited == 1:
