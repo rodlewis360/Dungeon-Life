@@ -117,7 +117,6 @@ def DungeonLife():
                         poisoned = True
                 if not poisoned == True:
                     poisoned = False
-            poisoned = False
             print("You vanquished the snake!")
             drop = random.choice(droppables)
             if drop == 'sword':
