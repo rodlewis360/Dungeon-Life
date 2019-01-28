@@ -130,7 +130,7 @@ def DungeonLife():
                 print("The snake swallowed a past hero with armor.  You try not to look as you pull it out.")
                 armor = 'armor'
             monsterskilled += 1
-        print("You died...")
-        print("You killed", monsterskilled, "monsters.")
+    print("You died...")
+    print("You killed", monsterskilled, "monsters.")
         
                 
