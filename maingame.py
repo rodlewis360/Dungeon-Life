@@ -21,13 +21,16 @@ def DungeonLife():
     print("You also realize that you can manipulate and create fire.")
     magicweapon = 'fire'
     sleep(2.5)
+    armoR = False
     print("You have 5 healing potions.")
     healthpotions = 5
     dice = [1, 2]
     while True:
+        while HP > HPlimit:
+            HP -= 1
         if HP < 1:
             break
-        if armor == 'armor':
+        if armor == 'armor' and armoR != True:
             HPlimit = 25
             HP += 15
         sleep(2.5)
@@ -52,7 +55,9 @@ def DungeonLife():
             enemieHP = 5
             print("A snake jumps out at you!")
             poisoned = False
-            while enemieHP > 0:
+            while enemieHP > 0.1:
+                while HP > HPlimit:
+                    HP -= 1
                 if HP < 1:
                     break
                 if poisoned == True:
@@ -133,6 +138,10 @@ def DungeonLife():
             if drop == 'armor':
                 print("The snake swallowed a past hero with armor.  You try not to look as you pull it out.")
                 armor = 'armor'
+                HPlimit = 25
+                if armoR != True:
+                    HP += 15
+                print("You have an HP limit of 25.")
             monsterskilled += 1
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
