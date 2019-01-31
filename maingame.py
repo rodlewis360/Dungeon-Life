@@ -25,11 +25,8 @@ def DungeonLife():
     healthpotions = 5
     dice = [1, 2]
     while True:
-        if HP < 1:
+        if HP < 0.1:
             break
-        if armor == 'armor':
-            HPlimit = 25
-            HP += 15
         sleep(2.5)
         print("Would you like to heal?")
         if input() == 'yes':
@@ -53,99 +50,13 @@ def DungeonLife():
             print("A snake jumps out at you!")
             poisoned = False
             while enemieHP > 0:
-                if HP < 1:
+                if HP < 0.1:
                     break
                 if poisoned == True:
                     HP -= 0.5
                 sleep(2.5)
                 print("What would you like to do (Melee, Wait, Magic, Flee, or Heal)?")
                 print("You have", HP, "HP out of", HPlimit,".")
-                print("The snake has", enemieHP, "HP left.")
-                waited = 0
-                whattodo = input()
-                if whattodo == 'Flee':
-                    if random.choice(dice) == 1:
-                        print("You run away, your feet flying.")
-                        break
-                    else:
-                        print("You try to run away, but the snake is blocking the exit.")
-                elif whattodo == 'Melee':
-                    if meleeweapon == 'stick':
-                        print("Your stick bounces off the snake's head, but you think you've done some damage.")
-                        enemieHP -= 1
-                        print("The snake loses 1 HP")
-                    if meleeweapon == 'sword':
-                        print("Your sword sends one scale flying, but the snake hisses loudly.")
-                        enemieHP -= 2
-                        print("The snake loses 2 health.")
-                elif whattodo == 'Wait':
-                    print("You wait for the snake's attack, hoping to dodge it.")
-                    waited = 1
-                elif whattodo == 'Magic':
-                    print("Your magic burns a hole through the snake.")
-                    enemieHP -= 2.5
-                    print("The snake loses 2.5 health")
-                elif whattodo == 'Heal':
-                    print("You drink 1 health potion.")
-                    healthpotions -= 1
-                    HP += 2.5
-                    if HP > HPlimit:
-                        healthpotions += 1
-                        HP -= 2.5
-                else:
-                    print("Remember, Melee, Magic, Wait, or Flee.")
-                sleep(2.5)
-                if enemieHP < 1:
-                    break
-                enemyattack = random.choice(snakeattacks)
-                if enemyattack == 'spit poison':
-                    if waited == 1:
-                        if random.choice(dice) == 1:
-                            print("The snake spit poison at you.  It doesn't penetrate your skin, though.")
-                            HP -= 1
-                        else:
-                            print("Your stamina from waiting helped you dodge the poison.")
-                    else:
-                        print("The snake spit poison at you.  It doesn't penetrate your skin, though.")
-                        HP -= 1
-                if enemyattack == 'bite':
-                    if waited == 1:
-                        if random.choice(dice) == 1:
-                            print("The snake bit you.  The poison sinks into your vains.")
-                            HP -= 1
-                            poisoned = True
-                        else:
-                            print("Your stamina from waiting helps you dodge the snake as it lashes out.")
-                    else:
-                        print("The snake bit you.  The poison sinks into your vains.")
-                        HP -= 1
-                        poisoned = True
-                if not poisoned == True:
-                    poisoned = False
-            print("You vanquished the snake!")
-            drop = random.choice(droppables)
-            if drop == 'sword':
-                print("You find that the snake has a sword lodged in it from a past hero.  You do not want to think of the terrible fate that he suffered.")
-                meleeweapon = 'sword'
-            if drop == 'healing potion':
-                print("You find a healing potion stuck in the snake's throat.")
-                healthpotions += 1
-            if drop == 'armor':
-                print("The snake swallowed a past hero with armor.  You try not to look as you pull it out.")
-                armor = 'armor'
-            monsterskilled += 1
-                if enemy == 'snake':
-            enemieHP = 5
-            print("A spider falls from the ceiling!")
-            poisoned = False
-            while enemieHP > 0:
-                if HP < 1:
-                    break
-                if poisoned == True:
-                    HP -= 0.5
-                sleep(2.5)
-                print("What would you like to do (Melee, Wait, Magic, Flee, or Heal)?")
-                print("You have", HP, "HP out of", HPlimit, ".")
                 print("The snake has", enemieHP, "HP left.")
                 waited = 0
                 whattodo = input()
@@ -250,13 +161,13 @@ def DungeonLife():
                         enemieHP -= 2.5
                         print("The spider loses 2.5 health.")
                 elif whattodo == 'Wait':
-                    print("You wait for the snake's attack, hoping to dodge it.")
+                    print("You wait for the spider's attack, hoping to dodge it.")
                     waited = 1
                 elif whattodo == 'Magic':
                     if magicweapon == 'fire':
                         print("Your fire misses the spider.")
                         enemieHP -= 0.5
-                        print("The snake loses 0.5 health")
+                        print("The spider loses 0.5 health")
                 elif whattodo == 'Heal':
                     print("You drink 1 health potion.")
                     healthpotions -= 1
@@ -266,6 +177,7 @@ def DungeonLife():
                         HP -= 2.5
                 else:
                     print("Remember, Melee, Magic, Wait, or Flee.")
+                    pass
                 sleep(2.5)
                 if enemieHP < 1:
                     break
@@ -282,104 +194,21 @@ def DungeonLife():
                         HP -= 2
                 if enemyattack == 'climb':
                     print("The spider climbs up the wall.")
-                    enemieHP += 1
+                    enemieHP += 0.5
+                    print("The spider gains 0.5 health.")
             print("You vanquished the spider!")
             drop = random.choice(droppables)
             if drop == 'sword':
-                print("You find that the snake has a sword lodged in it from a past hero.  You do not want to think of the terrible fate that he suffered.")
+                print("You see a sword up on a shelf, next to a spider web.")
                 meleeweapon = 'sword'
             if drop == 'healing potion':
-                print("You find a healing potion stuck in the snake's throat.")
+                print("You find a healing potion on a shelf that the spider had fiercly guarded.")
                 healthpotions += 1
             if drop == 'armor':
-                print("The snake swallowed a past hero with armor.  You try not to look as you pull it out.")
-                armor = 'armor'
-            monsterskilled += 1
-                if enemy == 'snake':
-            enemieHP = 5
-            print("A spider falls from the ceiling!")
-            poisoned = False
-            while enemieHP > 0:
-                if HP < 1:
-                    break
-                if poisoned == True:
-                    HP -= 0.5
-                sleep(2.5)
-                print("What would you like to do (Melee, Wait, Magic, Flee, or Heal)?")
-                print("You have", HP, "HP out of", HPlimit, ".")
-                print("The snake has", enemieHP, "HP left.")
-                waited = 0
-                whattodo = input()
-                if whattodo == 'Flee':
-                    if random.choice(dice) == 1:
-                        print("You run away, your feet flying.")
-                        break
-                    else:
-                        print("You try to run away, but the snake is blocking the exit.")
-                elif whattodo == 'Melee':
-                    if meleeweapon == 'stick':
-                        print("Your stick bounces off the snake's head, but you think you've done some damage.")
-                        enemieHP -= 1
-                        print("The snake loses 1 HP")
-                    if meleeweapon == 'sword':
-                        print("Your sword sends one scale flying, but the snake hisses loudly.")
-                        enemieHP -= 2
-                        print("The snake loses 2 health.")
-                elif whattodo == 'Wait':
-                    print("You wait for the snake's attack, hoping to dodge it.")
-                    waited = 1
-                elif whattodo == 'Magic':
-                    print("Your magic burns a hole through the snake.")
-                    enemieHP -= 2.5
-                    print("The snake loses 2.5 health")
-                elif whattodo == 'Heal':
-                    print("You drink 1 health potion.")
-                    healthpotions -= 1
-                    HP += 2.5
-                    if HP > HPlimit:
-                        healthpotions += 1
-                        HP -= 2.5
-                else:
-                    print("Remember, Melee, Magic, Wait, or Flee.")
-                sleep(2.5)
-                if enemieHP < 1:
-                    break
-                enemyattack = random.choice(snakeattacks)
-                if enemyattack == 'spit poison':
-                    if waited == 1:
-                        if random.choice(dice) == 1:
-                            print("The snake spit poison at you.  It doesn't penetrate your skin, though.")
-                            HP -= 1
-                        else:
-                            print("Your stamina from waiting helped you dodge the poison.")
-                    else:
-                        print("The snake spit poison at you.  It doesn't penetrate your skin, though.")
-                        HP -= 1
-                if enemyattack == 'bite':
-                    if waited == 1:
-                        if random.choice(dice) == 1:
-                            print("The snake bit you.  The poison sinks into your vains.")
-                            HP -= 1
-                            poisoned = True
-                        else:
-                            print("Your stamina from waiting helps you dodge the snake as it lashes out.")
-                    else:
-                        print("The snake bit you.  The poison sinks into your vains.")
-                        HP -= 1
-                        poisoned = True
-                if not poisoned == True:
-                    poisoned = False
-            print("You vanquished the snake!")
-            drop = random.choice(droppables)
-            if drop == 'sword':
-                print("You find that the snake has a sword lodged in it from a past hero.  You do not want to think of the terrible fate that he suffered.")
-                meleeweapon = 'sword'
-            if drop == 'healing potion':
-                print("You find a healing potion stuck in the snake's throat.")
-                healthpotions += 1
-            if drop == 'armor':
-                print("The snake swallowed a past hero with armor.  You try not to look as you pull it out.")
-                armor = 'armor'
+                print("You find a skeleton wearing iron armor in a corner, riddled with spider webs.")
+                armor = 'iron'
+                HPlimit == 15
+                HP += 5
             monsterskilled += 1
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
