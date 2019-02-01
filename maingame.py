@@ -23,7 +23,8 @@ def DungeonLife():
     print("You have 5 healing potions.")
     healthpotions = 5
     dice = [1, 2]
-    while True:
+    level = 0
+    while level < 101:
         poisoned = False
         if HP < 0.1:
             break
@@ -152,7 +153,7 @@ def DungeonLife():
                     HP += 5
             if drop == 'sparks':
                 print("You find a spellbook that will teach you sparks strapped on the snake's back.")
-                magicweapon = 'sparks
+                magicweapon = 'sparks'
             monsterskilled += 1
         if enemy == 'spider':
             enemieHP = 2.5
@@ -245,7 +246,11 @@ def DungeonLife():
                     armor = 'iron'
                     HPlimit = 15
                     HP += 5
+            if drop == 'sparks':
+                print("You find \"A Teacher's Guide to Teaching Sparks!\" on a shelf.")
+                magicweapon = 'sparks'
             monsterskilled += 1
+        level += 1
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
         
