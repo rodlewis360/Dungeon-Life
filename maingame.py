@@ -130,8 +130,11 @@ def DungeonLife():
                 healthpotions += 1
             if drop == 'armor':
                 print("The snake swallowed a past hero with armor.  You try not to look as you pull it out.")
-                armor = 'iron'
-                HPlimit = 15
+                try:
+                    armor == 'iron'
+                except NameError:
+                    armor = 'iron'
+                    HP += 5
             monsterskilled += 1
         if enemy == 'spider':
             enemieHP = 2.5
@@ -206,10 +209,12 @@ def DungeonLife():
                 healthpotions += 1
             if drop == 'armor':
                 print("You find a skeleton wearing iron armor in a corner, riddled with spider webs.")
-                armor = 'iron'
-                HPlimit = 15
-                print("You have an HP limit of 15.")
-                HP += 5
+                try:
+                    armor == 'iron'
+                except NameError:
+                    armor = 'iron'
+                    HPlimit = 15
+                    HP += 5
             monsterskilled += 1
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
