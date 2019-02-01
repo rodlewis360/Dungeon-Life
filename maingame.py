@@ -25,6 +25,7 @@ def DungeonLife():
     healthpotions = 5
     dice = [1, 2]
     while True:
+        poisoned = False
         if HP < 0.1:
             break
         sleep(2.5)
@@ -49,7 +50,7 @@ def DungeonLife():
             enemieHP = 5
             print("A snake jumps out at you!")
             poisoned = False
-            while enemieHP > 0:
+            while enemieHP > 0.0:
                 if HP < 0.1:
                     break
                 if poisoned == True:
@@ -134,11 +135,9 @@ def DungeonLife():
         if enemy == 'spider':
             enemieHP = 2.5
             print("A spider falls from the ceiling!")
-            while enemieHP > 0:
-                if HP < 1:
+            while enemieHP > 0.0:
+                if HP < 0.1:
                     break
-                if poisoned == True:
-                    HP -= 0.5
                 sleep(2.5)
                 print("What would you like to do (Melee, Wait, Magic, Flee, or Heal)?")
                 print("You have", HP, "HP out of", HPlimit,".")
@@ -207,7 +206,8 @@ def DungeonLife():
             if drop == 'armor':
                 print("You find a skeleton wearing iron armor in a corner, riddled with spider webs.")
                 armor = 'iron'
-                HPlimit == 15
+                HPlimit = 15
+                print("You have an HP limit of 15.")
                 HP += 5
             monsterskilled += 1
     print("You died...")
