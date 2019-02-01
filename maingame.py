@@ -130,7 +130,8 @@ def DungeonLife():
                 healthpotions += 1
             if drop == 'armor':
                 print("The snake swallowed a past hero with armor.  You try not to look as you pull it out.")
-                armor = 'armor'
+                armor = 'iron'
+                HPlimit = 15
             monsterskilled += 1
         if enemy == 'spider':
             enemieHP = 2.5
