@@ -9,7 +9,7 @@ def DungeonLife():
     skeletonattacks = ['claw', 'shoot', 'back up']
     spiderattacks = ['bite', 'climb']
     livingjawattacks = ['bite']
-    droppables = ['sword', 'healing potion', 'armor']
+    droppables = ['sword', 'healing potion', 'armor', 'sparks']
     print("You wake up in a dungeon, feeling natious.")
     sleep(2.5)
     print("You wonder why and how you got here, but you cannot worry now, for some reason.")
@@ -79,9 +79,25 @@ def DungeonLife():
                     print("You wait for the snake's attack, hoping to dodge it.")
                     waited = 1
                 elif whattodo == 'Magic':
-                    print("Your magic burns a hole through the snake.")
-                    enemieHP -= 2.5
-                    print("The snake loses 2.5 health")
+                    if magicweapon == 'fire':
+                        print("Your magic burns a hole through the snake.")
+                        enemieHP -= 2.5
+                        print("The snake loses 2.5 health")
+                    if magicweapon == 'sparks':
+                        print("Fire or Sparks?")
+                        magic = input()
+                        if magic == 'Sparks':
+                            print("Your sparks fly around the room.  One hits the snake in the eye.")
+                            HP -= 0.5
+                            enemieHP -= 3
+                            print("You lose 0.5 HP and the snake loses 3 HP.")
+                            sleep(2.5)
+                            print("The snake is unable to fight.")
+                            pass
+                        if magic == 'Fire':
+                            print("Your magic burns a hole through the snake.")
+                            enemieHP -= 2.5
+                            print("The snake loses 2.5 health")
                 elif whattodo == 'Heal':
                     print("You drink 1 health potion.")
                     healthpotions -= 1
@@ -134,6 +150,9 @@ def DungeonLife():
                 except NameError:
                     armor = 'iron'
                     HP += 5
+            if drop == 'sparks':
+                print("You find a spellbook that will teach you sparks strapped on the snake's back.")
+                magicweapon = 'sparks
             monsterskilled += 1
         if enemy == 'spider':
             enemieHP = 2.5
@@ -170,7 +189,19 @@ def DungeonLife():
                         print("Your fire misses the spider.")
                         enemieHP -= 0.5
                         print("The spider loses 0.5 health")
-                elif whattodo == 'Heal':
+                    if magicweapon == 'sparks':
+                        print("Fire or Sparks?")
+                        magic = input()
+                        if magic == 'Sparks':
+                            print("Your sparks fly around the room.  The spider falls to the ground.  Looks fried.")
+                            HP -= 1.5
+                            enemieHP -= 2.5
+                            print("You lose 1.5 HP and the snake loses 2.5 HP.")
+                            sleep(2.5)
+                        if magic == 'Fire':
+                            print("Your fire misses the spider.")
+                            enemieHP -= 0.5
+                            print("The spider loses 0.5 health")
                     print("You drink 1 health potion.")
                     healthpotions -= 1
                     HP += 2.5
@@ -209,7 +240,7 @@ def DungeonLife():
             if drop == 'armor':
                 print("You find a skeleton wearing iron armor in a corner, riddled with spider webs.")
                 try:
-                    armor == 'iron'
+                    armor
                 except NameError:
                     armor = 'iron'
                     HPlimit = 15
