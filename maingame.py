@@ -49,7 +49,7 @@ def DungeonLife():
             enemieHP = 5
             print("A snake jumps out at you!")
             poisoned = False
-            while enemieHP > 0.0:
+            while enemieHP > 0.1:
                 if HP < 0.1:
                     break
                 if poisoned == True:
@@ -138,7 +138,7 @@ def DungeonLife():
         if enemy == 'spider':
             enemieHP = 2.5
             print("A spider falls from the ceiling!")
-            while enemieHP > 0.0:
+            while enemieHP > 0.1:
                 if HP < 0.1:
                     break
                 sleep(2.5)
