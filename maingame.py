@@ -44,7 +44,6 @@ def DungeonLife():
                     healthpotions += 1
                     HP -= 2.5
         enemy = random.choice(enemies)
-        enemy = 'snake'
         if enemy == 'snake':
             enemieHP = 5
             print("A snake jumps out at you!")
