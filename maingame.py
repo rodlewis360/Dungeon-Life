@@ -32,7 +32,7 @@ def DungeonLife():
         print("Would you like to heal?")
         if input() == 'yes':
             print("How many potions would you like to drink?")
-            drink = input()
+            drink = int(input())
             a = 0
             if drink > healthpotions:
                 drink = healthpotions
