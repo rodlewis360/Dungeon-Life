@@ -13,7 +13,6 @@ def DungeonLife():
     print("You wake up in a dungeon, feeling natious.")
     sleep(2.5)
     print("You wonder why and how you got here, but you cannot worry now, for some reason.")
-    armor = ''
     sleep(2.5)
     print("You notice that you have a stick strapped to your side.")
     meleeweapon = 'stick'
