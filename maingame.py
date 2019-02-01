@@ -4,7 +4,7 @@ def DungeonLife():
     from time import sleep
     HP = 10
     HPlimit = 10
-    enemies = ['snake', 'skeleton', 'spider', 'living jaw']
+    enemies = ['snake', 'snake', 'snake', 'skeleton', 'skeleton', 'spider', 'spider', 'living jaw']
     snakeattacks = ['spit poison', 'bite']
     skeletonattacks = ['claw', 'shoot', 'back up']
     spiderattacks = ['bite', 'climb']
@@ -44,7 +44,7 @@ def DungeonLife():
                     healthpotions += 1
                     HP -= 2.5
         enemy = random.choice(enemies)
-        enemy = random.choice(['snake', 'spider'])
+        enemy = random.choice(['snake', 'snake', 'snake', 'spider', 'spider'])
         if enemy == 'snake':
             enemieHP = 5
             print("A snake jumps out at you!")
