@@ -253,5 +253,5 @@ def DungeonLife():
         level += 1
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
-        
-                
+
+DungeonLife()
