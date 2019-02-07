@@ -251,6 +251,8 @@ def DungeonLife():
                 magicweapon = 'sparks'
             monsterskilled += 1
         level += 1
+        if level > 14:
+            
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
 
