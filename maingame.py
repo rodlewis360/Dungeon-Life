@@ -196,7 +196,7 @@ def DungeonLife():
                             print("Your sparks fly around the room.  The spider falls to the ground.  Looks fried.")
                             HP -= 1.5
                             enemieHP -= 2.5
-                            print("You lose 1.5 HP and the snake loses 2.5 HP.")
+                            print("You lose 1.5 HP and the spider loses 2.5 HP.")
                             sleep(2.5)
                         if magic == 'Fire':
                             print("Your fire misses the spider.")
@@ -250,7 +250,7 @@ def DungeonLife():
                 magicweapon = 'sparks'
             monsterskilled += 1
         level += 1
-        elif level > 14:
+        elif level > 1000000:
             enemy = random.choice(['skeleton', 'skeleton', 'living jaw'])
             if enemy == 'skeleton':
                 enemieHP = 10
@@ -271,49 +271,52 @@ def DungeonLife():
                         else:
                             print("You try to run away, but the skeleton shoots you in the leg.")
                             HP -= 3.5
+                            print("You lose 3.5 HP.")
                     elif whattodo == 'Melee':
                         if meleeweapon == 'stick':
                             print("Your stick bounces off the skeleton's head.")
                             enemieHP -= 1.25
-                            print("The spider loses 0 HP")
+                            print("The skeleton loses 0 HP")
                         if meleeweapon == 'sword':
-                            print("Your sword smashes the spider.  It falls to the ground, dead.")
-                            enemieHP -= 2.5
-                            print("The spider loses 2.5 health.")
+                            print("Your sword separates a few bones from the creature.")
+                            enemieHP -= 1.75
+                            print("The skeleton loses 2.5 health.")
                     elif whattodo == 'Wait':
-                        print("You wait for the spider's attack, hoping to dodge it.")
+                        print("You wait for the skeleton's attack, hoping to dodge it.")
                         waited = 1
                     elif whattodo == 'Magic':
                         if magicweapon == 'fire':
-                            print("Your fire misses the spider.")
-                            enemieHP -= 0.5
-                            print("The spider loses 0.5 health")
+                            print("Your fire goes through the skeleton's head.  Melts a bone, though.")
+                            enemieHP -= 1
+                            print("The skeleton loses 1 health")
                         if magicweapon == 'sparks':
                             print("Fire or Sparks?")
                             magic = input()
                             if magic == 'Sparks':
-                                print("Your sparks fly around the room.  The spider falls to the ground.  Looks fried.")
+                                print("Your sparks fly around the room.  The skeleton falls back, hard.")
                                 HP -= 1.5
                                 enemieHP -= 2.5
-                                print("You lose 1.5 HP and the snake loses 2.5 HP.")
+                                print("You lose 1.5 HP and the skeleton loses 2.5 HP.")
                                 sleep(2.5)
+                                continue
                             if magic == 'Fire':
-                                print("Your fire misses the spider.")
-                                enemieHP -= 0.5
-                                print("The spider loses 0.5 health")
-                        print("You drink 1 health potion.")
-                        healthpotions -= 1
-                        HP += 2.5
-                        if HP > HPlimit:
-                            healthpotions += 1
-                            HP -= 2.5
+                                print("Your fire goes through the skeleton's head.  Melts a bone, though.")
+                                enemieHP -= 1
+                                print("The spider loses 1 health")
+                        if whattodo == 'Heal':
+                            print("You drink 1 health potion.")
+                            healthpotions -= 1
+                            HP += 2.5
+                            if HP > HPlimit:
+                                healthpotions += 1
+                                HP -= 2.5
                     else:
                         print("Remember, Melee, Magic, Wait, or Flee.")
-                        pass
+                        continue
                     sleep(2.5)
                     if enemieHP < 1:
                         break
-                    enemyattack = random.choice(spiderattacks)
+                    enemyattack = random.choice(skeletonattacks)
                     if enemyattack == 'bite':
                         if waited == 1:
                             if random.choice(dice) == 1:
