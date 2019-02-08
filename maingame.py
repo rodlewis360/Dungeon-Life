@@ -330,7 +330,7 @@ def DungeonLife():
                             HP -= 2
                     if enemyattack == 'back up':
                         print("The skeleton backs out of range.")
-                        enemieHP += 01
+                        enemieHP += 1
                         print("The skeleton gains 1 health.")
                 print("You vanquished the skeleton!")
                 drop = random.choice(droppables)
@@ -360,4 +360,7 @@ def DungeonLife():
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
 
+a = 0
+while a < 51:
+    print('')
 DungeonLife()
