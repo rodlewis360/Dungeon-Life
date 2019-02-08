@@ -250,7 +250,7 @@ def DungeonLife():
                 magicweapon = 'sparks'
             monsterskilled += 1
         level += 1
-        elif level > 1000000:
+        if level > 14 and enemy != 'snake' and enemy != 'spider':
             enemy = random.choice(['skeleton', 'skeleton', 'living jaw'])
             if enemy == 'skeleton':
                 enemieHP = 10
@@ -317,39 +317,45 @@ def DungeonLife():
                     if enemieHP < 1:
                         break
                     enemyattack = random.choice(skeletonattacks)
-                    if enemyattack == 'bite':
+                    if enemyattack == 'claw':
                         if waited == 1:
                             if random.choice(dice) == 1:
-                                print("The spider bit you.  The wound hurts.")
-                                HP -= 2
+                                print("The skeleton clawed you.  Your skin turns black where it was punctured.")
+                                HP -= 2.5
                             else:
-                                print("Your stamina from waiting helped you dodge the spider.")
+                                print("Your stamina from waiting helped you dodge the skeleton's hand.")
                         else:
-                            print("The spider bit you.  The wound hurts.")
+                            print("The skeleton clawed you.  Your skin turns black where it was punctured.")
                             HP -= 2
-                    if enemyattack == 'climb':
-                        print("The spider climbs up the wall.")
-                        enemieHP += 0.5
-                        print("The spider gains 0.5 health.")
-                 print("You vanquished the spider!")
+                    if enemyattack == 'back up':
+                        print("The skeleton backs out of range.")
+                        enemieHP += 01
+                        print("The skeleton gains 1 health.")
+                print("You vanquished the skeleton!")
                 drop = random.choice(droppables)
                 if drop == 'sword':
                     print("You see a sword up on a shelf, next to a spider web.")
                     meleeweapon = 'sword'
                 if drop == 'healing potion':
-                    print("You find a healing potion on a shelf that the spider had fiercly guarded.")
+                    print("You find a healing potion stick in the skeleton's skull.")
                     healthpotions += 1
                 if drop == 'armor':
-                    print("You find a skeleton wearing iron armor in a corner, riddled with spider webs.")
+                    print("You find the skeleton was wearing armor.  The only problem was he put it in his ribcage.")
                     try:
                         armor
                     except NameError:
-                        armor = 'iron'
-                        HPlimit = 15
-                        HP += 5
+                        armor = 'steel'
+                        HPlimit = 20
+                        HP += 10
+                        print("You now have an HP limit of 20")
                 if drop == 'sparks':
-                    print("You find \"A Teacher's Guide to Teaching Sparks!\" on a shelf.")
+                    print("You find the skeleton's talking brain in a corner.  It's last words were how to make sparks.")
                     magicweapon = 'sparks'
+                    print("You unlocked \"Sparks\"!")
+        if level == 15:
+            print("You find a tablet bearing this message:")
+            print("You terrible man!  You took the lives of countless people and now you shall pay!")
+            print("You wonder what this is all about.")
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
 
