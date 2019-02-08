@@ -363,4 +363,5 @@ def DungeonLife():
 a = 0
 while a < 51:
     print('')
+
 DungeonLife()
