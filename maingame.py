@@ -44,6 +44,7 @@ def DungeonLife():
                 if HP > HPlimit:
                     healthpotions += 1
                     HP -= 2.5
+        enemy = ''
         enemy = random.choice(enemies)
         if enemy == 'snake':
             enemieHP = 5
@@ -275,12 +276,12 @@ def DungeonLife():
                     elif whattodo == 'Melee':
                         if meleeweapon == 'stick':
                             print("Your stick bounces off the skeleton's head.")
-                            enemieHP -= 1.25
+                            enemieHP -= 0
                             print("The skeleton loses 0 HP")
                         if meleeweapon == 'sword':
                             print("Your sword separates a few bones from the creature.")
                             enemieHP -= 1.75
-                            print("The skeleton loses 2.5 health.")
+                            print("The skeleton loses 1.75 health.")
                     elif whattodo == 'Wait':
                         print("You wait for the skeleton's attack, hoping to dodge it.")
                         waited = 1
