@@ -360,8 +360,5 @@ def DungeonLife():
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
 
-a = 0
-while a < 51:
-    print('')
 
 DungeonLife()
