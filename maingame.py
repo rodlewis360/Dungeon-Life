@@ -353,9 +353,10 @@ def DungeonLife():
                     print("You find the skeleton's talking brain in a corner.  It's last words were how to make sparks.")
                     magicweapon = 'sparks'
                     print("You unlocked \"Sparks\"!")
+            
         if level == 15:
             print("You find a tablet bearing this message:")
-            print("You terrible man!  You took the lives of countless people and now you shall pay!")
+            print("\"You terrible man!  You took the lives of countless people and now you shall pay!\"")
             print("You wonder what this is all about.")
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
