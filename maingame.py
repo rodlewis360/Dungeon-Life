@@ -353,7 +353,106 @@ def DungeonLife():
                     print("You find the skeleton's talking brain in a corner.  It's last words were how to make sparks.")
                     magicweapon = 'sparks'
                     print("You unlocked \"Sparks\"!")
-            
+            if enemy == 'skeleton':
+                enemieHP = 10
+                print("A dead skeleton in the corner of the room gets up.")
+                while enemieHP > 0.1:
+                    if HP < 0.1:
+                        break
+                    sleep(2.5)
+                    print("What would you like to do (Melee, Wait, Magic, Flee, or Heal)?")
+                    print("You have", HP, "HP out of", HPlimit,".")
+                    print("The skeleton has", enemieHP, "HP left.")
+                    waited = 0
+                    whattodo = input()
+                    if whattodo == 'Flee':
+                        if random.choice(dice) == 1:
+                            print("You run away, your feet flying.")
+                            break
+                        else:
+                            print("You try to run away, but the skeleton shoots you in the leg.")
+                            HP -= 3.5
+                            print("You lose 3.5 HP.")
+                    elif whattodo == 'Melee':
+                        if meleeweapon == 'stick':
+                            print("Your stick bounces off the skeleton's head.")
+                            enemieHP -= 0
+                            print("The skeleton loses 0 HP")
+                        if meleeweapon == 'sword':
+                            print("Your sword separates a few bones from the creature.")
+                            enemieHP -= 1.75
+                            print("The skeleton loses 1.75 health.")
+                    elif whattodo == 'Wait':
+                        print("You wait for the skeleton's attack, hoping to dodge it.")
+                        waited = 1
+                    elif whattodo == 'Magic':
+                        if magicweapon == 'fire':
+                            print("Your fire goes through the skeleton's head.  Melts a bone, though.")
+                            enemieHP -= 1
+                            print("The skeleton loses 1 health")
+                        if magicweapon == 'sparks':
+                            print("Fire or Sparks?")
+                            magic = input()
+                            if magic == 'Sparks':
+                                print("Your sparks fly around the room.  The skeleton falls back, hard.")
+                                HP -= 1.5
+                                enemieHP -= 2.5
+                                print("You lose 1.5 HP and the skeleton loses 2.5 HP.")
+                                sleep(2.5)
+                                continue
+                            if magic == 'Fire':
+                                print("Your fire goes through the skeleton's head.  Melts a bone, though.")
+                                enemieHP -= 1
+                                print("The spider loses 1 health")
+                        if whattodo == 'Heal':
+                            print("You drink 1 health potion.")
+                            healthpotions -= 1
+                            HP += 2.5
+                            if HP > HPlimit:
+                                healthpotions += 1
+                                HP -= 2.5
+                    else:
+                        print("Remember, Melee, Magic, Wait, or Flee.")
+                        continue
+                    sleep(2.5)
+                    if enemieHP < 1:
+                        break
+                    enemyattack = random.choice(skeletonattacks)
+                    if enemyattack == 'claw':
+                        if waited == 1:
+                            if random.choice(dice) == 1:
+                                print("The skeleton clawed you.  Your skin turns black where it was punctured.")
+                                HP -= 2.5
+                            else:
+                                print("Your stamina from waiting helped you dodge the skeleton's hand.")
+                        else:
+                            print("The skeleton clawed you.  Your skin turns black where it was punctured.")
+                            HP -= 2
+                    if enemyattack == 'back up':
+                        print("The skeleton backs out of range.")
+                        enemieHP += 1
+                        print("The skeleton gains 1 health.")
+                print("You vanquished the skeleton!")
+                drop = random.choice(droppables)
+                if drop == 'sword':
+                    print("You see a sword up on a shelf, next to a spider web.")
+                    meleeweapon = 'sword'
+                if drop == 'healing potion':
+                    print("You find a healing potion stick in the skeleton's skull.")
+                    healthpotions += 1
+                if drop == 'armor':
+                    print("You find the skeleton was wearing armor.  The only problem was he put it in his ribcage.")
+                    try:
+                        armor
+                    except NameError:
+                        armor = 'steel'
+                        HPlimit = 20
+                        HP += 10
+                        print("You now have an HP limit of 20")
+                if drop == 'sparks':
+                    print("You find the skeleton's talking brain in a corner.  It's last words were how to make sparks.")
+                    magicweapon = 'sparks'
+                    print("You unlocked \"Sparks\"!")
         if level == 15:
             print("You find a tablet bearing this message:")
             print("\"You terrible man!  You took the lives of countless people and now you shall pay!\"")
