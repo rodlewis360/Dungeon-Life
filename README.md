@@ -1,4 +1,4 @@
-# Dungeon Life
+# Dungeon Life beta v1.0.0
 A dungeon survival game.  
 Update:  Beta 1.0.0 release!
 ### To play on Google OS:
