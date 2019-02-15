@@ -1,4 +1,38 @@
+class Person:
+    def __init__(self, HP, attacks, HPlimit, meleeweapon, magicweapon, healthpotions, currentenemy):
+        self.HP = HP
+        self.attacks = attacks
+        self.HPlimit = HPlimit
+        self.meleeweapon = meleeweapon
+        self.magicweapon = magicweapon
+        self.healthpotions = healthpotions
+    def attack():
+        print("What would you like to do(Melee, Magic, Heal, Wait, or Flee?")
+        whattodo = input()
+        if whattodo == 'melee':
+            if meleeweapon == 'stick':
+                print("You used", attacks[1].name "on", currentenemy.name, "doing", attacks[1].damage"damage.")
+                currentenemy.HP -= attacks[1].damage
+            if meleeweapon == 'sword':
+                print("You used", attacks[0].name, "on", currentenemy.name, "doing", attacks[0].damage, "damage.")
+                currentenemy -= attacks[0].damage
+
+
+class Attack:
+    def __init__(self, name, damage):
+        self.name = name
+        self.damage = damage
+
+
+class Enemy:
+    def __init__(self, name, attacks, HP):
+        self.name = name
+        self.attacks = attacks
+        self.HP = HP
+
+
 def DungeonLife():
+    self = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, Enemy('None', 'None', 'None')
     import random
     monsterskilled = 0
     from time import sleep
