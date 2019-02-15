@@ -1,6 +1,6 @@
-# Dungeon Life beta v1.0.0
+# Dungeon Life Alpha v1.0.0
 A dungeon survival game.  
-Update:  Beta 1.0.0 release!
+Update:  Alpha 1.0.0 release!
 ### To play on Google OS:
 1)Copy and paste maingame.py into python interpeter.  
 2)Have Fun!
