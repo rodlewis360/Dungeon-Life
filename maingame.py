@@ -7,15 +7,16 @@ class Person:
         self.magicweapon = magicweapon
         self.healthpotions = healthpotions
     def attack():
-        print("What would you like to do(Melee, Magic, Heal, Wait, or Flee?")
+        print("What would you like to do(Attack, Heal, Wait, or Flee)?")
+        print("You have", HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
         whattodo = input()
-        if whattodo == 'melee':
-            if meleeweapon == 'stick':
-                print("You used", attacks[1].name "on", currentenemy.name, "doing", attacks[1].damage"damage.")
-                currentenemy.HP -= attacks[1].damage
-            if meleeweapon == 'sword':
-                print("You used", attacks[0].name, "on", currentenemy.name, "doing", attacks[0].damage, "damage.")
-                currentenemy -= attacks[0].damage
+        if whattodo == 'Attack':
+            print("What attack would you like to use(stick, sword, fire, or sparks[same capitalization])?")
+            attack = input()
+            for a in attacks:
+                if a == attack:
+                    print("You use", a.name, "on", currentenemy.name, "doing", a.damage, "damage.")
+                    currentenemy.HP -= a.damage
 
 
 class Attack:
@@ -25,14 +26,17 @@ class Attack:
 
 
 class Enemy:
-    def __init__(self, name, attacks, HP):
+    def __init__(self, name, attacks, HP, currentperson):
         self.name = name
         self.attacks = attacks
         self.HP = HP
-
+    def attack():
+        attack = random.choice(attacks)
+        print(name, "used", attack.name, "doing", attack.damage, "damage.")
+        currentperson.HP -= attack.damage
 
 def DungeonLife():
-    self = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, Enemy('None', 'None', 'None')
+    player = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, Enemy('None', 'None', 'None')
     import random
     monsterskilled = 0
     from time import sleep
@@ -461,7 +465,7 @@ def DungeonLife():
                     print("You find a healing potion stick in a cracked tooth.")
                     healthpotions += 1
                 if drop == 'armor':
-                    print("You find askeleton was wearing armor.  The only problem was thy put it in their ribcage.")
+                    print("You find a skeleton was wearing armor.  The only problem was they put it in their ribcage.")
                     try:
                         armor
                     except NameError:
@@ -475,8 +479,15 @@ def DungeonLife():
                     print("You unlocked \"Sparks\"!")
         if level == 15:
             print("You find a tablet bearing this message:")
+            sleep(1)
             print("\"You terrible man!  You took the lives of countless people and now you shall pay!\"")
+            sleep(1)
             print("You wonder what this is all about.")
+            sleep(1)
+            print("You can't worry right now, though, because a monster that looks like")
+            print("Medusa jumps out of a corner!")
+            sleep(2.5)
+            print("She also strips you of your sword and armor!")
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
 
