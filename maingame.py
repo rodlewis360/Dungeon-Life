@@ -7,6 +7,7 @@ class Person:
         self.magicweapon = magicweapon
         self.healthpotions = healthpotions
     def attack():
+        import random
         print("What would you like to do(Attack, Heal, Wait, or Flee)?")
         print("You have", HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
         whattodo = input()
@@ -31,13 +32,13 @@ class Enemy:
         self.attacks = attacks
         self.HP = HP
     def attack():
+        import random
         attack = random.choice(attacks)
         print(name, "used", attack.name, "doing", attack.damage, "damage.")
         currentperson.HP -= attack.damage
 
 def DungeonLife():
     player = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, Enemy('None', 'None', 'None')
-    import random
     monsterskilled = 0
     from time import sleep
     HP = 10
@@ -62,6 +63,7 @@ def DungeonLife():
     healthpotions = 5
     dice = [1, 2]
     level = 0
+    import random
     while level < 101:
         poisoned = False
         if HP < 0.1:
