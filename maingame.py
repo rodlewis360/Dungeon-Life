@@ -1,12 +1,12 @@
 class Person:
-    def __init__(self, HP, attacks, HPlimit, meleeweapon, magicweapon, healthpotions, currentenemy):
+    def __init__(self, HP, attacks, HPlimit, meleeweapon, magicweapon, healthpotions):
         self.HP = HP
         self.attacks = attacks
         self.HPlimit = HPlimit
         self.meleeweapon = meleeweapon
         self.magicweapon = magicweapon
         self.healthpotions = healthpotions
-    def attack():
+    def attack(currentenemy):
         import random
         print("What would you like to do(Attack, Heal, Wait, or Flee)?")
         print("You have", HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
@@ -18,6 +18,14 @@ class Person:
                 if a == attack:
                     print("You use", a.name, "on", currentenemy.name, "doing", a.damage, "damage.")
                     currentenemy.HP -= a.damage
+        if whattodo == 'Heal':
+            if HP + 2.5 > HPlimit:
+                print("You have too much health.")
+            else:
+                print("You drink 1 health potion.")
+        if whattodo = 'Wait':
+            print("You wait for", currentenemy.name, "'s attack, hoping to dodge it.")
+            currentenemy.waited = True
 
 
 class Attack:
@@ -27,15 +35,17 @@ class Attack:
 
 
 class Enemy:
-    def __init__(self, name, attacks, HP, currentperson):
+    def __init__(self, name, attacks, HP, waited):
         self.name = name
         self.attacks = attacks
         self.HP = HP
-    def attack():
+    def attack(currentperson):
         import random
+        dice = [1, 2]
         attack = random.choice(attacks)
-        print(name, "used", attack.name, "doing", attack.damage, "damage.")
-        currentperson.HP -= attack.damage
+        if waited != True:
+            print(name, "used", attack.name, "doing", attack.damage, "damage.")
+            currentperson.HP -= attack.damage
 
 def DungeonLife():
     player = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, Enemy('None', 'None', 'None')
