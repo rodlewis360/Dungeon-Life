@@ -1,5 +1,5 @@
 class Person:
-    def __init__(self, HP, attacks, HPlimit, meleeweapon, magicweapon, healthpotions):
+    def __init__(self, HP, attacks, HPlimit, meleeweapon, magicweapon, healthpotions, waited):
         self.HP = HP
         self.attacks = attacks
         self.HPlimit = HPlimit
@@ -25,7 +25,14 @@ class Person:
                 print("You drink 1 health potion.")
         if whattodo = 'Wait':
             print("You wait for", currentenemy.name, "'s attack, hoping to dodge it.")
-            currentenemy.waited = True
+            waited = True
+        if whattodo == 'Flee':
+            dice = [1, 2]
+            import random
+            diceroll = random.choice(dice)
+            if diceroll == 1:
+                print("You run away, your feet flying.")
+                return 'run'
 
 
 class Attack:
@@ -35,7 +42,7 @@ class Attack:
 
 
 class Enemy:
-    def __init__(self, name, attacks, HP, waited):
+    def __init__(self, name, attacks, HP):
         self.name = name
         self.attacks = attacks
         self.HP = HP
@@ -43,9 +50,17 @@ class Enemy:
         import random
         dice = [1, 2]
         attack = random.choice(attacks)
-        if waited != True:
+        if currentperson.waited != True:
             print(name, "used", attack.name, "doing", attack.damage, "damage.")
             currentperson.HP -= attack.damage
+        else:
+            diceroll = random.choice(dice)
+            if diceroll == 1:
+                print(name, "missed you while trying to do", attack.name, ".")
+            else:
+                print(name, "used", attack.name, "doing", attack.damage, "damage.")
+                currentperson.HP -= attack.damage
+            
 
 def DungeonLife():
     player = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, Enemy('None', 'None', 'None')
