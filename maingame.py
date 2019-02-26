@@ -511,10 +511,13 @@ def DungeonLife():
             sleep(1)
             print("You wonder what this is all about.")
             sleep(1)
-            print("You can't worry right now, though, because a monster that looks like")
-            print("Medusa jumps out of a corner!")
-            sleep(2.5)
-            print("She also strips you of your sword and armor!")
+            print("You can't worry right now, though, because a monster that looks like Medusa jumps out of a corner!")
+            Medusa = Enemy('Medusa', [Attack('slash', 5), Attack('bite', 2.5), Attack('smash', 7.5)], 25)
+            while player.HP > 0.1 and Medusa.HP > 0.1:
+                Medusa.attack(player)
+                player.attack(Medusa)
+            if player.HP > 0.1:
+                print("You vanquished Medusa!")
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
 
