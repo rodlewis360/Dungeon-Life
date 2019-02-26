@@ -2,7 +2,7 @@
 A dungeon survival game.  
 Update:  Alpha 1.1.0 release!
 ## Added:
-Medusa
+Medusa  
 Object-Oriented coding for faster speed and less glitching
 ### To play on Google OS:
 1)Copy and paste maingame.py into python interpeter.  
