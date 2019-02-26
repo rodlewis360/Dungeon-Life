@@ -1,6 +1,9 @@
-# Dungeon Life Alpha v1.0.0
+# Dungeon Life Alpha v1.1.0
 A dungeon survival game.  
-Update:  Alpha 1.0.0 release!
+Update:  Alpha 1.1.0 release!
+## Added:
+Medusa
+Object-Oriented coding for faster speed and less glitching
 ### To play on Google OS:
 1)Copy and paste maingame.py into python interpeter.  
 2)Have Fun!
