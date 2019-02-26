@@ -42,7 +42,7 @@ class Attack:
 
 
 class Enemy:
-    def __init__(self, name, attacks, HP):
+    def __init__(self, name, attacks, HP, drops):
         self.name = name
         self.attacks = attacks
         self.HP = HP
@@ -63,8 +63,7 @@ class Enemy:
             
 
 def DungeonLife():
-    player = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, Enemy('None', 'None', 'None')
-    monsterskilled = 0
+    player = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, False)
     from time import sleep
     HP = 10
     HPlimit = 10
@@ -512,12 +511,14 @@ def DungeonLife():
             print("You wonder what this is all about.")
             sleep(1)
             print("You can't worry right now, though, because a monster that looks like Medusa jumps out of a corner!")
-            Medusa = Enemy('Medusa', [Attack('slash', 5), Attack('bite', 2.5), Attack('smash', 7.5)], 25)
+            Medusa = Enemy('Medusa', [Attack('slash', 5), Attack('bite', 2.5), Attack('smash', 7.5)], 25, ['armor of Paul Revere', 'sword of fire', 'cursed flames')
+            player.HPlimit = 20
             while player.HP > 0.1 and Medusa.HP > 0.1:
                 Medusa.attack(player)
                 player.attack(Medusa)
             if player.HP > 0.1:
                 print("You vanquished Medusa!")
+                drop = random.choice(Medusa.drops)
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
 
