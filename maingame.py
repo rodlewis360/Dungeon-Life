@@ -6,7 +6,7 @@ class Person:
         self.meleeweapon = meleeweapon
         self.magicweapon = magicweapon
         self.healthpotions = healthpotions
-    def attack(currentenemy):
+    def attack(currentenemy, obj):
         import random
         print("What would you like to do(Attack, Heal, Wait, or Flee)?")
         print("You have", HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
@@ -46,7 +46,7 @@ class Enemy:
         self.name = name
         self.attacks = attacks
         self.HP = HP
-    def attack(currentperson):
+    def attack(currentperson, obj):
         import random
         dice = [1, 2]
         attack = random.choice(attacks)
