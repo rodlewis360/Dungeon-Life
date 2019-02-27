@@ -23,7 +23,7 @@ class Person:
                 print("You have too much health.")
             else:
                 print("You drink 1 health potion.")
-        if whattodo = 'Wait':
+        if whattodo == 'Wait':
             print("You wait for", currentenemy.name, "'s attack, hoping to dodge it.")
             waited = True
         if whattodo == 'Flee':
