@@ -1,6 +1,6 @@
-# Dungeon Life Alpha v1.1.0
+# Dungeon Life Alpha v0.1.2
 A dungeon survival game.  
-Update:  Alpha 1.1.0 release!
+Update:  Alpha 0.1.2 release!
 ## Added:
 Medusa  
 Object-Oriented coding for faster speed and less glitching
