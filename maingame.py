@@ -160,7 +160,7 @@ def DungeonLife():
                             print("You lose 0.5 HP and the snake loses 3 HP.")
                             sleep(2.5)
                             print("The snake is unable to fight.")
-                            pass
+                            break
                         if magic == 'Fire':
                             print("Your magic burns a hole through the snake.")
                             enemieHP -= 2.5
@@ -409,11 +409,14 @@ def DungeonLife():
                 if drop == 'armor':
                     print("You find the skeleton was wearing armor.  The only problem was he put it in his ribcage.")
                     try:
+                        if armor == 'iron':
+                            armor = 'steel'
+                            HPlimit = 20
+                    try:
                         armor
                     except NameError:
                         armor = 'steel'
                         HPlimit = 20
-                        HP += 10
                         print("You now have an HP limit of 20")
                 if drop == 'sparks':
                     print("You find the skeleton's talking brain in a corner.  It's last words were how to make sparks.")
