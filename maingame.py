@@ -53,6 +53,7 @@ class Enemy:
         if currentperson.waited != True:
             print(name, "used", attack.name, "doing", attack.damage, "damage.")
             currentperson.HP -= attack.damage
+            currentperson.waited = False
         else:
             diceroll = random.choice(dice)
             if diceroll == 1:
