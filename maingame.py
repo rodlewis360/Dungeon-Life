@@ -482,7 +482,7 @@ def DungeonLife():
                     sleep(2.5)
                     if enemieHP < 1:
                         break
-                    if waited != `:
+                    if waited != '':
                         print("The jaw bit you.  You realize that part of your arm is now gone.")
                 drop = random.choice(droppables)
                 if drop == 'sword':
