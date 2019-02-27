@@ -412,8 +412,7 @@ def DungeonLife():
                         if armor == 'iron':
                             armor = 'steel'
                             HPlimit = 20
-                    try:
-                        armor
+                            print("You now have an HP limit of 20.")
                     except NameError:
                         armor = 'steel'
                         HPlimit = 20
