@@ -98,7 +98,12 @@ def DungeonLife():
         print("Would you like to heal?")
         if input() == 'yes':
             print("How many potions would you like to drink?")
-            drink = int(input())
+            drink = input()
+            try:
+                drink2 = int(drink)
+            except ValueError:
+                if drink 'l3v3l':
+                    level = 15
             a = 0
             if drink > healthpotions:
                 drink = healthpotions
