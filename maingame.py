@@ -66,6 +66,7 @@ class Enemy:
 def DungeonLife():
     player = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, False)
     from time import sleep
+    monsterskilled = 0
     HP = 10
     HPlimit = 10
     enemies = ['snake', 'snake', 'snake', 'skeleton', 'skeleton', 'spider', 'spider', 'living jaw']
@@ -512,7 +513,7 @@ def DungeonLife():
             print("You wonder what this is all about.")
             sleep(1)
             print("You can't worry right now, though, because a monster that looks like Medusa jumps out of a corner!")
-            Medusa = Enemy('Medusa', [Attack('slash', 5), Attack('bite', 2.5), Attack('smash', 7.5)], 25, ['armor of Paul Revere', 'sword of fire', 'cursed flames')
+            Medusa = Enemy('Medusa', [Attack('slash', 5), Attack('bite', 2.5), Attack('smash', 7.5)], 25, ['armor of Paul Revere', 'sword of fire', 'cursed flames'])
             player.HPlimit = 20
             while player.HP > 0.1 and Medusa.HP > 0.1:
                 Medusa.attack(player)
@@ -522,6 +523,7 @@ def DungeonLife():
                 drop = random.choice(Medusa.drops)
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
+    print("You got to level", level, ".")
 
 
 DungeonLife()
