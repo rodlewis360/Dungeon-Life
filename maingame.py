@@ -103,13 +103,13 @@ def DungeonLife():
                 drink2 = int(drink)
             except ValueError:
                 if drink 'l3v3l':
-                    level = 15
+                    level = int(input)
             a = 0
-            if drink > healthpotions:
-                drink = healthpotions
-            healthpotions -= drink
-            print("You drink", drink, "health potions.")
-            while healthpotions > 0 and a < drink:
+            if drink2 > healthpotions:
+                drink2 = healthpotions
+            healthpotions -= drink2
+            print("You drink", drink2, "health potions.")
+            while healthpotions > 0 and a < drink2:
                 HP += 2.5
                 a += 1
                 if HP > HPlimit:
