@@ -6,11 +6,11 @@ Medusa
 Object-Oriented coding for faster speed and less glitching
 Bug Fixes (small)
 ## To Come:
-Snape (boss)
-Groyle (boss)
-Four Titans (boss)
-Clara (undisclosed)
-Completely object oriented programing
+Snape (boss)  
+Groyle (boss)  
+Four Titans (boss)  
+Clara (undisclosed)  
+Completely object oriented programing  
 ### To play on Google OS:
 1)Copy and paste maingame.py into python interpeter.  
 2)Have Fun!
