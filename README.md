@@ -3,7 +3,7 @@ A dungeon survival game.
 Update:  Alpha 0.1.2 release!
 ## Added:
 Medusa  
-Object-Oriented coding for faster speed and less glitching
+Object-Oriented coding for faster speed and less glitching  
 Bug Fixes (small)
 ## To Come:
 Snape (boss)  
