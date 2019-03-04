@@ -101,9 +101,9 @@ def DungeonLife():
             drink = input()
             try:
                 drink2 = int(drink)
-            except ValueError:
+            except ValueError or TypeError or ValueError and TypeError:
                 if drink == 'l3v3l':
-                    level = int(input)
+                    level = int(input())
             a = 0
             if drink2 > healthpotions:
                 drink2 = healthpotions
