@@ -12,16 +12,10 @@ class Person:
         print("You have", HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
         whattodo = input()
         if whattodo == 'Attack':
-            print("What attack would you like to use(stick, sword, fire, or sparks[same capitalization])?")
+            print("What attack would you like to use", """(stick, sword, fire, or sparks[same capitalization])?""")
             attack = input()
             for a in attacks:
                 if a == attack:
-                    if a.name = 'sword' and meleeweapon == 'stick':
-                        print("You don't have that.")
-                        attack(currentenemy)
-                    if a.name = 'sparks' and magicweapon == 'fire':
-                        print("You don't have that.")
-                        attack(currentenemy)
                     print("You use", a.name, "on", currentenemy.name, "doing", a.damage, "damage.")
                     currentenemy.HP -= a.damage
         if whattodo == 'Heal':
@@ -71,7 +65,7 @@ class Enemy:
             
 
 def DungeonLife():
-    player = Person(10, [Attack('sword', 5), Attack('stick', 2.5), Attack('fire', 5), Attack('sparks', 6)], 10, 'stick', 'fire', 5, False)
+    player = Person(10, [ Attack('stick', 1.5), Attack('fire', 2.5)], 10, 'stick', 'fire', 5, False)
     from time import sleep
     monsterskilled = 0
     enemies = [Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5,   
