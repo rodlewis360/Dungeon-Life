@@ -1,5 +1,5 @@
 class Person:
-    def __init__(self, HP, attacks, HPlimit, meleeweapon, magicweapon, healthpotions, waited):
+    def __init__(self, HP, attacks, HPlimit, healthpotions, waited):
         self.HP = HP
         self.attacks = attacks
         self.HPlimit = HPlimit
@@ -12,7 +12,9 @@ class Person:
         print("You have", HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
         whattodo = input()
         if whattodo == 'Attack':
-            print("What attack would you like to use", """(stick, sword, fire, or sparks[same capitalization])?""")
+            print("What attack would you like to use?")
+            print("""stick 
+fire""")
             attack = input()
             for a in attacks:
                 if a == attack:
@@ -62,13 +64,36 @@ class Enemy:
             else:
                 print(name, "used", attack.name, "doing", attack.damage, "damage.")
                 currentperson.HP -= attack.damage
+    def drop(currentperson, obj):
+        drop = random.choice(drops)
+        if drop == 'iron armor':
+            currentperson.HPlimit = 15
+        if drop == 'steel armor':
+            currentperson.HPlimit = 20
+        if drop == 'orc armor':
+            currentperson.HPlimit = 30
+        if drop == 'armor of Paul Revere':
+            currentperson.HPlimit = 40
+        if drop == 'sword':
+            currentperson.attacks.append(Attack('sword', 6))
+        if drop == 'sword of fire':
+            currentperson.attacks.append(Attack('fire sword', 10))
+        if drop == 'sparks':
+            currentperson.attacks.append(Attack('sparks', 5))
+        if drop == 'cursed flames':
+            currentperson.attacks.append(Attack('cursed flames', 11))
+        if drop == 'healthpotion':
+            currentperson.healthpotions += 1
+        print(name, "dropped", drop, ".")
             
 
 def DungeonLife():
-    player = Person(10, [ Attack('stick', 1.5), Attack('fire', 2.5)], 10, 'stick', 'fire', 5, False)
+    player = Person(10, [ Attack('stick', 1.5), Attack('fire', 2.5)], 10, 5, False)
     from time import sleep
     monsterskilled = 0
-    enemies = [Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5,   
+    enemies = [Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion' 'healthpotion', 'healthpotion'])]
+    player.between()
+    while 
         if level == 15:
             print("You find a tablet bearing this message:")
             sleep(1)
@@ -84,6 +109,8 @@ def DungeonLife():
             if player.HP > 0.1:
                 print("You vanquished Medusa!")
                 drop = random.choice(Medusa.drops)
+                print("Medusa dropped 5 healthpotions, too.")
+                player.healthpotions += 5
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
     print("You got to level", level, ".")
