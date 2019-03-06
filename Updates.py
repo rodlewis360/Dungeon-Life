@@ -1,12 +1,18 @@
 class Person:
-    def __init__(self, HP, attacks, HPlimit, healthpotions, waited):
+    def __init__(self, HP, attacks, HPlimit, healthpotions, waited, effect):
         self.HP = HP
         self.attacks = attacks
         self.HPlimit = HPlimit
         self.meleeweapon = meleeweapon
         self.magicweapon = magicweapon
         self.healthpotions = healthpotions
-    def attack(currentenemy, obj):
+        self.waited = waited
+        self.effect = effect
+    def attack(currentenemy, obj, effects):
+        if poisoned == True:
+            HP -= 0.5
+        if fire == True:
+            HP -= 1
         import random
         print("What would you like to do(Attack, Heal, Wait, or Flee)?")
         print("You have", HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
@@ -15,11 +21,14 @@ class Person:
             print("What attack would you like to use?")
             print("""stick 
 fire""")
+            for a in attacks:
+                print(a.name)
             attack = input()
             for a in attacks:
                 if a == attack:
                     print("You use", a.name, "on", currentenemy.name, "doing", a.damage, "damage.")
                     currentenemy.HP -= a.damage
+                    currenteney.effect = effects.get(a.effect)
         if whattodo == 'Heal':
             if HP + 2.5 > HPlimit:
                 print("You have too much health.")
@@ -39,17 +48,22 @@ fire""")
 
 
 class Attack:
-    def __init__(self, name, damage):
+    def __init__(self, name, damage, effect):
         self.name = name
         self.damage = damage
+        self.effect = effect
 
 
 class Enemy:
-    def __init__(self, name, attacks, HP, drops):
+    def __init__(self, name, attacks, HP, drops, poisoned):
         self.name = name
         self.attacks = attacks
         self.HP = HP
+        self.drops = drops
+        self.poisoned = poisoned
     def attack(currentperson, obj, ran):
+        if poisoned == True:
+            HP -= 0.5
         import random
         dice = [1, 2]
         attack = random.choice(attacks)
@@ -75,25 +89,27 @@ class Enemy:
         if drop == 'armor of Paul Revere':
             currentperson.HPlimit = 40
         if drop == 'sword':
-            currentperson.attacks.append(Attack('sword', 6))
+            currentperson.attacks.append(Attack('sword', 6, 'None'))
         if drop == 'sword of fire':
-            currentperson.attacks.append(Attack('fire sword', 10))
+            currentperson.attacks.append(Attack('fire sword', 10), 'fire')
         if drop == 'sparks':
             currentperson.attacks.append(Attack('sparks', 5))
         if drop == 'cursed flames':
-            currentperson.attacks.append(Attack('cursed flames', 11))
+            currentperson.attacks.append(Attack('cursed flames', 11, 'cursed flame'))
         if drop == 'healthpotion':
             currentperson.healthpotions += 1
         print(name, "dropped", drop, ".")
             
 
 def DungeonLife():
-    player = Person(10, [ Attack('stick', 1.5), Attack('fire', 2.5)], 10, 5, False)
+    player = Person(10, [ Attack('stick', 1.5, 'None'), Attack('fire', 2.5, 'fire')], 10, 5, False, False)
     from time import sleep
     monsterskilled = 0
-    enemies = [Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion' 'healthpotion', 'healthpotion'])]
+    enemies = [Enemy['snake', [Attack('bite', 2.5, 'poison'), Attack('spit', 1, 'None')], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy['snake', [Attack('bite', 2.5), Attack('spit', 1)], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion']), Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion' 'healthpotion', 'healthpotion'])]
     player.between()
-    while 
+    while player.HP > 0.1:
+        enemy = random.choice(enemies)
+        enemy.attack(
         if level == 15:
             print("You find a tablet bearing this message:")
             sleep(1)
