@@ -25,9 +25,11 @@ class Person:
             print("What attack would you like to use?")
             print("""stick 
 fire""")
+            #print out available attacks
             for a in attacks:
                 print(a.name)
             attack = input()
+            #deal damage
             for a in attacks:
                 if a == attack:
                     print("You use", a.name, "on", currentenemy.name, "doing", a.damage, "damage.")
@@ -53,8 +55,13 @@ fire""")
         print("What would you like to do while you're safe?")
         whattodo = input()
         if whattodo == 'show':
-            print(HP)
-            print(
+            #show stuff
+            print("HP:", HP)
+            print("HP limit:", HPlimit)
+            print("attacks:")
+            for a in attacks:
+                print(a)
+        
 
 
 class Attack:
