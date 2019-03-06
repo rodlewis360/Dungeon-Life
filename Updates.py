@@ -35,11 +35,13 @@ fire""")
                     print("You use", a.name, "on", currentenemy.name, "doing", a.damage, "damage.")
                     currentenemy.HP -= a.damage
                     currentenemy.effect = a.effect
+        #Healing section
         if whattodo == 'Heal':
             if HP + 2.5 > HPlimit:
                 print("You have too much health.")
             else:
                 print("You drink 1 health potion.")
+                HP += 2.5
         if whattodo == 'Wait':
             print("You wait for", currentenemy.name, "'s attack, hoping to dodge it.")
             waited = True
@@ -49,6 +51,7 @@ fire""")
             diceroll = random.choice(dice)
             if diceroll == 1:
                 print("You run away, your feet flying.")
+                # variable "run"
                 return True
         return False
     def between():
@@ -61,6 +64,16 @@ fire""")
             print("attacks:")
             for a in attacks:
                 print(a)
+        #Heal
+        if whattodo == 'Heal':
+            print("How many potions would you like to drink?")
+            drink = input()
+            if drink > healthpotions:
+                drink = healthpotions
+            healthpotions -= drink
+            # add health
+            HP += drink * 2.5
+            
         
 
 
@@ -70,7 +83,7 @@ class Attack:
         self.damage = damage
         self.effect = effect
 
-
+# enemies
 class Enemy:
     def __init__(self, name, attacks, HP, drops, poisoned):
         self.name = name
@@ -87,9 +100,7 @@ class Enemy:
         if effect == 'cursed fire':
             HP -= 1.5
         if effect == 'electricity':
-            HP -= 2
-        import random
-        dice = [1, 2]
+        # attack the player
         attack = random.choice(attacks)
         if currentperson.waited != True:
             print(name, "used", attack.name, "doing", attack.damage, "damage.")
@@ -104,6 +115,7 @@ class Enemy:
                 currentperson.HP -= attack.damage
     def drop(currentperson, obj):
         drop = random.choice(drops)
+        # drop effects
         if drop == 'iron armor':
             currentperson.HPlimit = 15
         if drop == 'steel armor':
@@ -149,6 +161,7 @@ def DungeonLife():
             print("You wonder what this is all about.")
             sleep(1)
             print("You can't worry right now, though, because a monster that looks like Medusa jumps out of a corner!")
+            # Medusa battle begins.
             Medusa = Enemy('Medusa', [Attack('slash', 5), Attack('bite', 2.5), Attack('smash', 7.5)], 25, ['armor of Paul Revere', 'sword of fire', 'cursed flames'])
             player.HPlimit = 20
             while player.HP > 0.1 and Medusa.HP > 0.1:
@@ -158,10 +171,10 @@ def DungeonLife():
                 drop = random.choice(Medusa.drops)
                 print("Medusa dropped 5 healthpotions, too.")
                 player.healthpotions += 5
-                
+    # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
     print("You got to level", level, ".")
 
-
+# initiate
 DungeonLife()
