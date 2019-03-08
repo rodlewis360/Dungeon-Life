@@ -9,7 +9,7 @@ class Person:
         self.waited = waited
         self.effect = effect
     # this is the attack section
-    def attack(currentenemy, obj, effects):
+    def attack(currentenemy, obj):
         # check for effects
         if effect == 'fire':
             HP -= 1
@@ -23,6 +23,7 @@ class Person:
             effect = 'None'
         if effect == 'heal':
             currentenemy.HP += 0.5
+            effect = 'None'
         import random
         # Ask for what to do?
         print("What would you like to do(Attack, Heal, Wait, or Flee)?")
@@ -61,7 +62,7 @@ fire""")
                 # variable "run"
                 return True
         return False
-    def between():
+    def between(level):
         print("What would you like to do while you're safe?")
         whattodo = input()
         if whattodo == 'show':
@@ -71,15 +72,17 @@ fire""")
             print("attacks:")
             for a in attacks:
                 print(a)
-        # Heal
-        if whattodo == 'Heal':
+        if whattodo == 'heal':
             print("How many potions would you like to drink?")
-            drink = input()
-            if drink > healthpotions:
-                drink = healthpotions
-            healthpotions -= drink
-            # add health
-            HP += drink * 2.5
+            try:
+                drink = int(input())
+                if drink > healthpotions:
+                    drink = healthpotions
+                HP += drink * 2.5
+            except ValueError or TypeError:
+                if drink == 'l3v3l':
+                    level = int(input()) - 1
+                    return level
             
         
 
@@ -112,6 +115,7 @@ class Enemy:
             effect = 'None'
         if effect == 'heal':
             currentperson.HP += 0.5
+            effect = 'None'
         # attack the player
         attack = random.choice(attacks)
         if currentperson.waited != True:
@@ -160,7 +164,7 @@ def DungeonLife():
     # Start game
     enemies = [snake, snake, snake, spider, spider]
     while player.HP > 0.1:
-        player.between()
+        level = player.between(level)
         enemy = random.choice(enemies)
         enemy.attack(player, player.attack)
         # drop system
@@ -185,7 +189,8 @@ def DungeonLife():
                 print("Medusa dropped 5 healthpotions, too.")
                 player.healthpotions += 5
                 a = 0
-                skeleton = Enemy('skeleton', [Attack('claw', 5, 'None'), Attack('shoot', 7.5, 'Heal')])
+                skeleton = Enemy('skeleton', [Attack('claw', 5, 'None'), Attack('shoot', 7.5, 'Heal')], )
+        level += 1
     # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
