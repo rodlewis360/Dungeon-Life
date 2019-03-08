@@ -29,15 +29,14 @@ class Person:
         print("What would you like to do(Attack, Heal, Wait, or Flee)?")
         print("You have", HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
         whattodo = input()
+        # Attack process
         if whattodo == 'Attack':
             print("What attack would you like to use?")
-            print("""stick 
-fire""")
             # print out available attacks
             for a in attacks:
                 print(a.name)
             attack = input()
-            #deal damage
+            # deal damage
             for a in attacks:
                 if a == attack:
                     print("You use", a.name, "on", currentenemy.name, "doing", a.damage, "damage.")
@@ -83,8 +82,6 @@ fire""")
                 if drink == 'l3v3l':
                     level = int(input()) - 1
                     return level
-            
-        
 
 # Attack class
 class Attack:
