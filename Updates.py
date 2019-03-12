@@ -163,9 +163,13 @@ def DungeonLife():
     while player.HP > 0.1:
         level = player.between(level)
         enemy = random.choice(enemies)
-        enemy.attack(player, player.attack)
+        while player.HP > 0.1 and enemy.HP > 0.1:
+            enemy.attack(player, player.attack)
         # drop system
-        enemy.drop(player)
+        if enemy.HP < 0.1:
+            enemy.drop(player)
+        if player.HP > 0.1:
+            level += 1
         # Medusa boss battle
         if level == 15:
             print("You find a tablet bearing this message:")
