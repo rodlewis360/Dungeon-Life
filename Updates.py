@@ -82,6 +82,7 @@ class Person:
                 if drink == 'l3v3l':
                     level = int(input()) - 1
                     return level
+        return level + 1
 
 # Attack class
 class Attack:
@@ -111,14 +112,15 @@ class Enemy:
             currentperson.HP -= 0.5
             effect = 'None'
         if effect == 'heal':
-            currentperson.HP += 0.5
+            currentperson.HP += 1.5
             effect = 'None'
         # attack the player
         attack = random.choice(attacks)
         if currentperson.waited != True:
-            print(name, "used", attack.name, "doing", attack.damage, "damage.")
+            print(name, "used", attack.name, "doing", attack.damage, "damage.  It has", attack.effect, "effect.")
             currentperson.HP -= attack.damage
             currentperson.waited = False
+            currentperson.effect = attack.effect
         else:
             diceroll = random.choice(dice)
             if diceroll == 1:
@@ -148,6 +150,8 @@ class Enemy:
             currentperson.attacks.append(Attack('cursed flames', 7.5, 'cursed fire'))
         if drop == 'healthpotion':
             currentperson.healthpotions += 1
+        if drop == 'health tomb':
+            currentperson.attacks.append(Attack('health tomb', 0, 'heal'))
         print(name, "dropped", drop, ".")
             
 
@@ -157,7 +161,7 @@ def DungeonLife():
     monsterskilled = 0
     # define 'snake' and 'spider'
     snake = Enemy('snake', [Attack('bite', 2.5, 'poison'), Attack('spit', 1, 'None')], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks'], 'None')
-    spider = Enemy('spider', [Attack('bite', 2.5), Attack('web', 1.5)], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
+    spider = Enemy('spider', [Attack('bite', 2.5, 'poison'), Attack('web', 1.5, 'heal')], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
     # Start game
     enemies = [snake, snake, snake, spider, spider]
     while player.HP > 0.1:
