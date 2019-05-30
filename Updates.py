@@ -61,24 +61,26 @@ class Person:
                 # variable "run"
                 return True
         return False
-    def between(level):
+    def between(player, level, obj):
         print("What would you like to do while you're safe?")
         whattodo = input()
         if whattodo == 'show':
             # show stuff
-            print("HP:", HP)
-            print("HP limit:", HPlimit)
+            print("HP:", player.HP)
+            print("HP limit:", player.HPlimit)
             print("attacks:")
-            for a in attacks:
-                print(a)
+            for a in player.attacks:
+                print(a.name)
         if whattodo == 'heal':
             print("How many potions would you like to drink?")
             try:
                 drink = int(input())
+                # drink said number of healthpotions
                 if drink > healthpotions:
                     drink = healthpotions
-                HP += drink * 2.5
+                int(player.HP) += drink * 2.5
             except ValueError or TypeError:
+                # cheat code
                 if drink == 'l3v3l':
                     level = int(input()) - 1
                     return level
@@ -166,10 +168,10 @@ def DungeonLife():
     # Start game
     enemies = [snake, snake, snake, spider, spider]
     while player.HP > 0.1:
-        level = player.between(level)
+        level = player.between(player, level)
         enemy = random.choice(enemies)
         while player.HP > 0.1 and enemy.HP > 0.1:
-            enemy.attack(player, player.attack)
+            enemy.attack(player, player.attack())
         # drop system
         if enemy.HP < 0.1:
             enemy.drop(player)
