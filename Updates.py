@@ -158,7 +158,7 @@ class Enemy:
             
 
 def DungeonLife():
-    player = Person(10, [ Attack('stick', 1.5, 'None'), Attack('fire', 2.5, 'fire')], 10, 5, False, 'None')
+    player = Person(10, [ Attack('stick', 1.5, 'None'), Attack('fire', 2.5, 'fire')], 10, 5, False, False, 'None')
     from time import sleep
     monsterskilled = 0
     level = 0
@@ -177,7 +177,7 @@ def DungeonLife():
             enemy.drop(player)
         if player.HP > 0.1:
             level += 1
-        # Medusa boss battle
+        # Medusa boss battl
         if level == 15:
             print("You find a tablet bearing this message:")
             sleep(1)
