@@ -185,8 +185,8 @@ def DungeonLife():
     enemies = [snake, snake, snake, spider, spider]
     while player.HP > 0.1:
         player.level = player.between(player)
-        print(enemy.name, "jumps out at you!")
         enemy = random.choice(enemies)
+        print(enemy.name, "jumps out at you!")
         while player.HP > 0.1 and enemy.HP > 0.1:
             ran = player.attack(enemy)
             if enemy.HP > 0.1:
