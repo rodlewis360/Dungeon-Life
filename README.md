@@ -1,9 +1,10 @@
-# Dungeon Life Beta v1.0.0
+# Dungeon Life Beta v1.1.1
 A dungeon survival game.  
-Update:  Beta 1.0.0 release!
+Update:  Beta v1.0.0 release!
 ## Added:
 Completely object oriented programing  
-Bug Fixes (small)
+Bug Fixes (big)
+Snape (boss)
 ## To Come:
 New enemies!
 New gear and cheat codes!
@@ -17,3 +18,9 @@ New gear and cheat codes!
 4)Have Fun! 
 ### To play on Linux OS:
 N/A)Undetermined.  Most likely same as chrome.
+
+
+### Updates.py:
+Unstable version, used for experimental gameplay.
+##### Currently:
+Beta v1.1.0
