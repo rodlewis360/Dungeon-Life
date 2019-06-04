@@ -1,47 +1,53 @@
+from time import sleep
+import random
 # Only ever going to be used for a player.
 class Person:
     # initiate
-    def __init__(self, HP, attacks, HPlimit, healthpotions, waited, effect):
+    def __init__(self, HP, attacks, HPlimit, healthpotions, waited, effect, level):
         self.HP = HP
         self.attacks = attacks
         self.HPlimit = HPlimit
         self.healthpotions = healthpotions
         self.waited = waited
         self.effect = effect
+        self.level = level
     # this is the attack section
-    def attack(currentenemy, obj):
+    def attack(self, currentenemy):
         # check for effects
-        if effect == 'fire':
-            HP -= 1
-        if effect == 'poison':
-            HP -= 0.5
-        if effect == 'cursed fire':
-            HP -= 1.5
-        if effect == 'electricity':
-            HP -= 2
-            currentenemy.HP -= 0.5
-            effect = 'None'
-        if effect == 'heal':
-            currentenemy.HP += 0.5
-            effect = 'None'
+        try:
+            if self.effect == 'fire':
+                self.HP -= 1
+            if self.effect == 'poison':
+                self.HP -= 0.5
+            if self.effect == 'cursed fire':
+                self.HP -= 1.5
+            if self.effect == 'electricity':
+                self.HP -= 2
+                currentenemy.HP -= 0.5
+                self.effect = 'None'
+            if self.effect == 'heal':
+                currentenemy.HP += 0.5
+                self.effect = 'None'
+        except NameError:
+            self.effect = 'None'
         import random
         # Ask for what to do?
         print("What would you like to do(Attack, Heal, Wait, or Flee)?")
-        print("You have", HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
+        print("You have", self.HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
         whattodo = input()
         # Attack process
         if whattodo == 'Attack':
             print("What attack would you like to use?")
             # print out available attacks
-            for a in attacks:
-                print(a.name)
+            for a in self.attacks:
+                print(a)
             attack = input()
             # deal damage
-            for a in attacks:
+            for a in self.attacks:
                 if a == attack:
-                    print("You use", a.name, "on", currentenemy.name, "doing", a.damage, "damage.")
-                    currentenemy.HP -= a.damage
-                    currentenemy.effect = a.effect
+                    print("You use", a, "doing", self.attacks.get(a).damage, "damage.  It has", self.attacks.get(a).effect, "effect.")
+                    currentenemy.HP -= self.attacks.get(attack).damage
+                    currentenemy.effect = self.attacks.get(attack).effect
         # Healing section
         if whattodo == 'Heal':
             if HP + 2.5 > HPlimit:
@@ -61,7 +67,8 @@ class Person:
                 # variable "run"
                 return True
         return False
-    def between(player, level, obj):
+    # Fuction for in between levels
+    def between(player, obj):
         print("What would you like to do while you're safe?")
         whattodo = input()
         if whattodo == 'show':
@@ -70,7 +77,7 @@ class Person:
             print("HP limit:", player.HPlimit)
             print("attacks:")
             for a in player.attacks:
-                print(a.name)
+                print(a)
         if whattodo == 'heal':
             print("How many potions would you like to drink?")
             try:
@@ -78,13 +85,13 @@ class Person:
                 # drink said number of healthpotions
                 if drink > healthpotions:
                     drink = healthpotions
-                int(player.HP) += drink * 2.5
+                player.HP += drink * 2.5
             except ValueError or TypeError:
                 # cheat code
                 if drink == 'l3v3l':
-                    level = int(input()) - 1
-                    return level
-        return level + 1
+                    player.level = int(input()) - 1
+                    return player.level
+        return player.level + 1
 
 # Attack class
 class Attack:
@@ -101,83 +108,95 @@ class Enemy:
         self.HP = HP
         self.drops = drops
         self.effect = effect
-    def attack(currentperson, obj, ran):
+    def attack(self, currentperson, ran):
         # check for effects and deal damage accordingly
-        if effect == 'poison':
-            HP -= 0.5
-        if effect == 'fire':
-            HP -= 1
-        if effect == 'cursed fire':
-            HP -= 1.5
-        if effect == 'electricity':
-            HP -= 2
+        if self.effect == 'poison':
+            self.HP -= 0.5
+        if self.effect == 'fire':
+            self.HP -= 1
+        if self.effect == 'cursed fire':
+            self.HP -= 1.5
+        if self.effect == 'electricity':
+            self.HP -= 2
             currentperson.HP -= 0.5
-            effect = 'None'
-        if effect == 'heal':
+            self.effect = 'None'
+        if self.effect == 'heal':
             currentperson.HP += 1.5
-            effect = 'None'
+            self.effect = 'None'
         # attack the player
-        attack = random.choice(attacks)
+        attack = random.choice(self.attacks)
         if currentperson.waited != True:
-            print(name, "used", attack.name, "doing", attack.damage, "damage.  It has", attack.effect, "effect.")
+            print(self.name, "used", attack.name, "doing", attack.damage, "damage.  It has", attack.effect, "effect.")
             currentperson.HP -= attack.damage
             currentperson.waited = False
             currentperson.effect = attack.effect
         else:
             diceroll = random.choice(dice)
             if diceroll == 1:
-                print(name, "missed you while trying to do", attack.name, ".")
+                print(self.name, "missed you while trying to do", attack.name, ".")
             else:
-                print(name, "used", attack.name, "doing", attack.damage, "damage.")
+                print(self.name, "used", attack.name, "doing", attack.damage, "damage.")
                 currentperson.HP -= attack.damage
                 currentperson.effect = attack.effect
-    def drop(currentperson, obj):
-        drop = random.choice(drops)
+    def drop(self, currentperson):
+        drop = random.choice(self.drops)
         # drop effects
         if drop == 'iron armor':
-            currentperson.HPlimit = 15
+            if currentperson.HPlimit < 15:
+                currentperson.HPlimit = 15
         if drop == 'steel armor':
-            currentperson.HPlimit = 20
+            if currentperson.HPlimit < 20:
+                currentperson.HPlimit = 20
         if drop == 'orc armor':
-            currentperson.HPlimit = 30
+            if currentperson.HPlimit < 30:
+                currentperson.HPlimit = 30
         if drop == 'armor of Paul Revere':
-            currentperson.HPlimit = 40
+            if currentperson.HPlimit < 40:
+                currentperson.HPlimit = 40
         if drop == 'sword':
-            currentperson.attacks.append(Attack('sword', 3.5, 'None'))
+            sword = Attack('sword', 3.5, 'None')
+            currentperson.attacks['sword'] = sword
         if drop == 'poison fang':
-            currentperson.attacks.append(Attack('poison fang', 5), 'poison')
+            poison_fang = Attack('poison fang', 5, 'poison')
+            currentperson.attacks['poison fang'] = poison_fang
         if drop == 'sparks':
-            currentperson.attacks.append(Attack('sparks', 3, 'electricity'))
+            sparks = Attack('sparks', 3, 'electricity')
+            currentperson.attacks['sparks'] = sparks
         if drop == 'cursed flames':
-            currentperson.attacks.append(Attack('cursed flames', 7.5, 'cursed fire'))
+            cursed_flames = Attack('cursed flames', 7.5, 'cursed fire')
+            currentperson.attacks['cursed flames'] = cursed_flames
         if drop == 'healthpotion':
             currentperson.healthpotions += 1
         if drop == 'health tomb':
-            currentperson.attacks.append(Attack('health tomb', 0, 'heal'))
+            health_tomb = Attack('health tomb', 0, 'heal')
+            currentperson.attacks['health tomb'] = health_tomb
         print(name, "dropped", drop, ".")
             
 
 def DungeonLife():
-    player = Person(10, [ Attack('stick', 1.5, 'None'), Attack('fire', 2.5, 'fire')], 10, 5, False, False, 'None')
+    player = Person(10, { 'stick': Attack('stick', 1.5, 'None'), 'fire': Attack('fire', 2.5, 'fire')}, 10, 5, False, 'None', 0)
     from time import sleep
+    import random
     monsterskilled = 0
-    level = 0
     # define 'snake' and 'spider'
-    snake = Enemy('snake', [Attack('bite', 2.5, 'poison'), Attack('spit', 1, 'None')], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks'], 'None')
-    spider = Enemy('spider', [Attack('bite', 2.5, 'poison'), Attack('web', 1.5, 'heal')], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
+    snake = Enemy('Snake', [Attack('bite', 2.5, 'poison'), Attack('spit', 1, 'None')], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks'], 'None')
+    spider = Enemy('Spider', [Attack('bite', 2.5, 'poison'), Attack('web', 1.5, 'heal')], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
     # Start game
     enemies = [snake, snake, snake, spider, spider]
     while player.HP > 0.1:
-        level = player.between(player, level)
+        player.level = player.between(player)
+        print(enemy.name, "jumps out at you!")
         enemy = random.choice(enemies)
         while player.HP > 0.1 and enemy.HP > 0.1:
-            enemy.attack(player, player.attack())
+            ran = player.attack(enemy)
+            if enemy.HP > 0.1:
+                enemy.attack(player, ran)
         # drop system
         if enemy.HP < 0.1:
             enemy.drop(player)
         if player.HP > 0.1:
             level += 1
-        # Medusa boss battl
+        # Medusa boss battle
         if level == 15:
             print("You find a tablet bearing this message:")
             sleep(1)
@@ -188,22 +207,26 @@ def DungeonLife():
             print("You can't worry right now, though, because a monster that looks like Medusa jumps out of a corner!")
             # Medusa battle begins.
             Medusa = Enemy('Medusa', [Attack('slash', 5), Attack('bite', 2.5), Attack('smash', 7.5)], 25, ['armor of Paul Revere', 'sword of fire', 'cursed flames'], 'None')
-            player.HPlimit = 20
             while player.HP > 0.1 and Medusa.HP > 0.1:
                 Medusa.attack(player, player.attack(Medusa))
             if player.HP > 0.1:
+                # Rewards and unlocks
                 print("You vanquished Medusa!")
                 drop = random.choice(Medusa.drops)
                 print("Medusa dropped 5 healthpotions, too.")
                 player.healthpotions += 5
                 a = 0
+                print("You unlocked new baddies!")
+                sleep(1)
+                print("Skeleton and Living Jaw unlocked!")
                 skeleton = Enemy('skeleton', [Attack('claw', 5, 'None'), Attack('shoot', 7.5, 'Heal')], 15, ['sword', 'sword', 'sparks', 'sparks', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
                 livingjaw = Enemy('living jaw', [Attack('bite', 7.5, 'poison')], 10, ['healthpotion'], 'None')
+                enemies = [skeleton, skeleton, skeleton, skeleton, skeleton, livingjaw, livingjaw, livingjaw, snake, snake, snake, spider, spider]
         level += 1
     # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
-    print("You got to level", level, ".")
+    print("You got to level", player.level, ".")
 
 # initiate
 DungeonLife()
