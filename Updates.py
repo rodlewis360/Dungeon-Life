@@ -106,6 +106,7 @@ class Enemy:
         self.HP = HP
         self.drops = drops
         self.effect = effect
+        self.HPlimit = HP
     def attack(self, currentperson, ran):
         # check for effects and deal damage accordingly
         if self.effect == 'poison':
@@ -257,6 +258,8 @@ def DungeonLife():
                 print("Snape's minion unlocked!")
                 snapeminion = Enemy("Snape's minion", [Attack("Avada Kedavra", 10, 'None')], 5, ['healthpotion', 'cursed flames']
                 enemies.append(snapeminion)
+        for a in enemies:
+            a.HP = a.HPlimit
     # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
