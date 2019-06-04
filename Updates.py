@@ -164,6 +164,9 @@ class Enemy:
             if drop == 'cursed flames':
                 cursed_flames = Attack('cursed flames', 7.5, 'cursed fire')
                 currentperson.attacks['cursed flames'] = cursed_flames
+            if drop == "Snape's wand":
+                snapewand = Attack('Avada Kedavra', 10, 'None')
+                currentperson.attacks["Snape's wand"] = snapewand
             if drop == 'healthpotion':
                 currentperson.healthpotions += 1
             if drop == 'health tomb':
@@ -235,6 +238,25 @@ def DungeonLife():
                 skeleton = Enemy('skeleton', [Attack('claw', 5, 'None'), Attack('shoot', 7.5, 'Heal')], 15, ['sword', 'sword', 'sparks', 'sparks', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
                 livingjaw = Enemy('living jaw', [Attack('bite', 7.5, 'poison')], 10, ['healthpotion'], 'None')
                 enemies = [skeleton, skeleton, skeleton, skeleton, skeleton, livingjaw, livingjaw, livingjaw, snake, snake, snake, spider, spider]
+        # Snape boss battle
+        # Wow does OOP make programming so much easier!
+        if player.level == 30:
+            sleep(1)
+            print("You found yet another tablet!")
+            sleep(1)
+            print("It says, \"You made it past the last one?  Bah!  You will not beat my next minion.  You shall forever pay for what you did to me and my family!\"")
+            Snape = Enemy('Snape', [Attack('magic flames', 5, 'cursed fire'), Attack('Avada Kedavra', 10, 'None')], 25, ['orc armor', "Snape's wand"]
+            while player.HP > 0.1 and Snape.HP > 0.1:
+                player.attack(Snape)
+                if Snape.HP > 0.1:
+                    Snape.attack(player)
+            if Snape.HP < 0.1:
+                Snape.drop()
+                print("You unlocked new baddies!")
+                sleep(1)
+                print("Snape's minion unlocked!")
+                snapeminion = Enemy("Snape's minion", [Attack("Avada Kedavra", 10, 'None')], 5, ['healthpotion', 'cursed flames']
+                enemies.append(snapeminion)
     # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
