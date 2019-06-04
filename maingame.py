@@ -50,11 +50,12 @@ class Person:
                     currentenemy.effect = self.attacks.get(attack).effect
         # Healing section
         if whattodo == 'Heal':
-            if HP + 2.5 > HPlimit:
+            if self.HP + 2.5 > self.HPlimit:
                 print("You have too much health.")
             else:
                 print("You drink 1 health potion.")
-                HP += 2.5
+                self.HP += 2.5
+                self.healthpotions -= 1
         if whattodo == 'Wait':
             print("You wait for", currentenemy.name, "'s attack, hoping to dodge it.")
             waited = True
@@ -83,10 +84,10 @@ class Person:
             try:
                 drink = int(input())
                 # drink said number of healthpotions
-                if drink > healthpotions:
-                    drink = healthpotions
+                if drink > player.healthpotions:
+                    drink = player.healthpotions
                 player.HP += drink * 2.5
-            except ValueError or TypeError:
+            except ValueError:
                 # cheat code
                 if drink == 'l3v3l':
                     player.level = int(input()) - 1
@@ -139,39 +140,41 @@ class Enemy:
                 currentperson.HP -= attack.damage
                 currentperson.effect = attack.effect
     def drop(self, currentperson):
-        drop = random.choice(self.drops)
-        # drop effects
-        if drop == 'iron armor':
-            if currentperson.HPlimit < 15:
-                currentperson.HPlimit = 15
-        if drop == 'steel armor':
-            if currentperson.HPlimit < 20:
-                currentperson.HPlimit = 20
-        if drop == 'orc armor':
-            if currentperson.HPlimit < 30:
-                currentperson.HPlimit = 30
-        if drop == 'armor of Paul Revere':
-            if currentperson.HPlimit < 40:
-                currentperson.HPlimit = 40
-        if drop == 'sword':
-            sword = Attack('sword', 3.5, 'None')
-            currentperson.attacks['sword'] = sword
-        if drop == 'poison fang':
-            poison_fang = Attack('poison fang', 5, 'poison')
-            currentperson.attacks['poison fang'] = poison_fang
-        if drop == 'sparks':
-            sparks = Attack('sparks', 3, 'electricity')
-            currentperson.attacks['sparks'] = sparks
-        if drop == 'cursed flames':
-            cursed_flames = Attack('cursed flames', 7.5, 'cursed fire')
-            currentperson.attacks['cursed flames'] = cursed_flames
-        if drop == 'healthpotion':
-            currentperson.healthpotions += 1
-        if drop == 'health tomb':
-            health_tomb = Attack('health tomb', 0, 'heal')
-            currentperson.attacks['health tomb'] = health_tomb
-        print(name, "dropped", drop, ".")
-            
+        try:
+            drop = random.choice(self.drops)
+            # drop effects
+            if drop == 'iron armor':
+                if currentperson.HPlimit < 15:
+                    currentperson.HPlimit = 15
+            if drop == 'steel armor':
+                if currentperson.HPlimit < 20:
+                    currentperson.HPlimit = 20
+            if drop == 'orc armor':
+                if currentperson.HPlimit < 30:
+                    currentperson.HPlimit = 30
+            if drop == 'armor of Paul Revere':
+                if currentperson.HPlimit < 40:
+                    currentperson.HPlimit = 40
+            if drop == 'sword':
+                sword = Attack('sword', 3.5, 'None')
+                currentperson.attacks['sword'] = sword
+            if drop == 'poison fang':
+                poison_fang = Attack('poison fang', 5, 'poison')
+                currentperson.attacks['poison fang'] = poison_fang
+            if drop == 'sparks':
+                sparks = Attack('sparks', 3, 'electricity')
+                currentperson.attacks['sparks'] = sparks
+            if drop == 'cursed flames':
+                cursed_flames = Attack('cursed flames', 7.5, 'cursed fire')
+                currentperson.attacks['cursed flames'] = cursed_flames
+            if drop == 'healthpotion':
+                currentperson.healthpotions += 1
+            if drop == 'health tomb':
+                health_tomb = Attack('health tomb', 0, 'heal')
+                currentperson.attacks['health tomb'] = health_tomb
+            print(self.name, "dropped", drop, ".")
+        except NameError:
+            print(self.name, "dropped nothing.")
 
 def DungeonLife():
     player = Person(10, { 'stick': Attack('stick', 1.5, 'None'), 'fire': Attack('fire', 2.5, 'fire')}, 10, 5, False, 'None', 0)
@@ -195,9 +198,9 @@ def DungeonLife():
         if enemy.HP < 0.1:
             enemy.drop(player)
         if player.HP > 0.1:
-            level += 1
+            player.level += 1
         # Medusa boss battle
-        if level == 15:
+        if player.level == 15:
             print("You find a tablet bearing this message:")
             sleep(1)
             print("\"You terrible man!  You took the lives of countless people and now you shall pay!\"")
@@ -222,7 +225,6 @@ def DungeonLife():
                 skeleton = Enemy('skeleton', [Attack('claw', 5, 'None'), Attack('shoot', 7.5, 'Heal')], 15, ['sword', 'sword', 'sparks', 'sparks', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
                 livingjaw = Enemy('living jaw', [Attack('bite', 7.5, 'poison')], 10, ['healthpotion'], 'None')
                 enemies = [skeleton, skeleton, skeleton, skeleton, skeleton, livingjaw, livingjaw, livingjaw, snake, snake, snake, spider, spider]
-        level += 1
     # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
