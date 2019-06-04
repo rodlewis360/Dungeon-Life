@@ -1,16 +1,12 @@
-# Dungeon Life Alpha v0.1.2
+# Dungeon Life Beta v1.0.0
 A dungeon survival game.  
-Update:  Alpha 0.1.2 release!
+Update:  Beta 1.0.0 release!
 ## Added:
-Medusa  
-Object-Oriented coding for faster speed and less glitching  
+Completely object oriented programing  
 Bug Fixes (small)
 ## To Come:
-Snape (boss)  
-Groyle (boss)  
-Four Titans (boss)  
-Clara (undisclosed)  
-Completely object oriented programing  
+New enemies!
+New gear and cheat codes!
 ### To play on Google OS:
 1)Copy and paste maingame.py into python interpeter.  
 2)Have Fun!
@@ -20,4 +16,4 @@ Completely object oriented programing
 3)Copy and paste into python interpreter.  
 4)Have Fun! 
 ### To play on Linux OS:
-N/A)Undetermined.
+N/A)Undetermined.  Most likely same as chrome.
