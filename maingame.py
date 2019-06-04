@@ -87,11 +87,8 @@ class Person:
                 if drink > player.healthpotions:
                     drink = player.healthpotions
                 player.HP += drink * 2.5
-            except ValueError:
-                # cheat code
-                if drink == 'l3v3l':
-                    player.level = int(input()) - 1
-                    return player.level
+        if whattodo == 'l3v3l':
+            player.level = input() - 1
         return player.level + 1
 
 # Attack class
@@ -186,13 +183,26 @@ def DungeonLife():
     spider = Enemy('Spider', [Attack('bite', 2.5, 'poison'), Attack('web', 1.5, 'heal')], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
     # Start game
     enemies = [snake, snake, snake, spider, spider]
+    print("You wake up in a dungeon, feeling nautious.")
+    sleep(1)
+    print("You notice you have a stick strapped to your back.")
+    sleep(1)
+    print("You also realize you can create fire and you have 5 health potions.")
+    sleep(1)
+    print("You feel the urge to move up, towards the sky!")
+    sleep(1)
+    print("Good luck, hero!")
     while player.HP > 0.1:
+        sleep(1)
         player.level = player.between(player)
+        sleep(2.5)
         enemy = random.choice(enemies)
         print(enemy.name, "jumps out at you!")
         while player.HP > 0.1 and enemy.HP > 0.1:
+            sleep(1)
             ran = player.attack(enemy)
             if enemy.HP > 0.1:
+                sleep(1)
                 enemy.attack(player, ran)
         # drop system
         if enemy.HP < 0.1:
