@@ -58,7 +58,7 @@ class Person:
                 self.healthpotions -= 1
         if whattodo == 'Wait':
             print("You wait for", currentenemy.name, "'s attack, hoping to dodge it.")
-            waited = True
+            self.waited = True
         if whattodo == 'Flee':
             dice = [1, 2]
             import random
@@ -80,15 +80,30 @@ class Person:
             for a in player.attacks:
                 print(a)
         if whattodo == 'heal':
-            print("How many potions would you like to drink?")
-            try:
-                drink = int(input())
-                # drink said number of healthpotions
-                if drink > player.healthpotions:
-                    drink = player.healthpotions
-                player.HP += drink * 2.5
+            leave = False
+            while not leave:
+                try:
+                    print("How many potions would you like to drink?")
+                    drink = int(input())
+                    # drink said number of healthpotions
+                    if drink > player.healthpotions:
+                        drink = player.healthpotions
+                    if not player.HP > player.HPlimit:
+                        print("You drink", drink, "health potions.")
+                        player.HP += drink * 2.5
+                    else:
+                        print("You have too much health!")
+                        leave = True
+                except ValueError:
+                    print("Input a number!")
         if whattodo == 'l3v3l':
-            player.level = input() - 1
+            leave = False
+            while not leave:
+                try:
+                    player.level = int(input()) - 1
+                except ValueError:
+                    continue
+                leave = True
         return player.level + 1
 
 # Attack class
@@ -165,9 +180,6 @@ class Enemy:
             if drop == 'cursed flames':
                 cursed_flames = Attack('cursed flames', 7.5, 'cursed fire')
                 currentperson.attacks['cursed flames'] = cursed_flames
-            if drop == "Snape's wand":
-                snapewand = Attack('Avada Kedavra', 10, 'None')
-                currentperson.attacks["Snape's wand"] = snapewand
             if drop == 'healthpotion':
                 currentperson.healthpotions += 1
             if drop == 'health tomb':
@@ -246,7 +258,7 @@ def DungeonLife():
             print("You found yet another tablet!")
             sleep(1)
             print("It says, \"You made it past the last one?  Bah!  You will not beat my next minion.  You shall forever pay for what you did to me and my family!\"")
-            Snape = Enemy('Snape', [Attack('magic flames', 5, 'cursed fire'), Attack('Avada Kedavra', 10, 'None')], 25, ['orc armor', "Snape's wand"]
+            Snape = Enemy('Snape', [Attack('magic flames', 5, 'cursed fire'), Attack('Avada Kedavra', 10, 'None')], 25, ['orc armor', "Snape's wand"])
             while player.HP > 0.1 and Snape.HP > 0.1:
                 player.attack(Snape)
                 if Snape.HP > 0.1:
@@ -256,8 +268,8 @@ def DungeonLife():
                 print("You unlocked new baddies!")
                 sleep(1)
                 print("Snape's minion unlocked!")
-                snapeminion = Enemy("Snape's minion", [Attack("Avada Kedavra", 10, 'None')], 5, ['healthpotion', 'cursed flames']
-                enemies.append(snapeminion)
+                snapeminion = Enemy("Snape's minion", [Attack("Avada Kedavra", 10, 'None')], 5, ['healthpotion', 'cursed flames'])
+                enemies.append(snapeminion)        
         for a in enemies:
             a.HP = a.HPlimit
     # endgame
