@@ -94,8 +94,8 @@ class Person:
                     else:
                         print("You have too much health!")
                         leave = True
-                    except ValueError:
-                        print("Input a number!")
+                except ValueError:
+                    print("Input a number!")
         if whattodo == 'l3v3l':
             leave = False
             while not leave:
@@ -121,6 +121,7 @@ class Enemy:
         self.HP = HP
         self.drops = drops
         self.effect = effect
+        self.HPlimit = HP
     def attack(self, currentperson, ran):
         # check for effects and deal damage accordingly
         if self.effect == 'poison':
@@ -250,6 +251,8 @@ def DungeonLife():
                 skeleton = Enemy('skeleton', [Attack('claw', 5, 'None'), Attack('shoot', 7.5, 'Heal')], 15, ['sword', 'sword', 'sparks', 'sparks', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
                 livingjaw = Enemy('living jaw', [Attack('bite', 7.5, 'poison')], 10, ['healthpotion'], 'None')
                 enemies = [skeleton, skeleton, skeleton, skeleton, skeleton, livingjaw, livingjaw, livingjaw, snake, snake, snake, spider, spider]
+        for a in enemies:
+            a.HP = a.HPlimit
     # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
