@@ -250,26 +250,7 @@ def DungeonLife():
                 print("Skeleton and Living Jaw unlocked!")
                 skeleton = Enemy('skeleton', [Attack('claw', 5, 'None'), Attack('shoot', 7.5, 'Heal')], 15, ['sword', 'sword', 'sparks', 'sparks', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
                 livingjaw = Enemy('living jaw', [Attack('bite', 7.5, 'poison')], 10, ['healthpotion'], 'None')
-                enemies = [skeleton, skeleton, skeleton, skeleton, skeleton, livingjaw, livingjaw, livingjaw, snake, snake, snake, spider, spider]
-        # Snape boss battle
-        # Wow does OOP make programming so much easier!
-        if player.level == 30:
-            sleep(1)
-            print("You found yet another tablet!")
-            sleep(1)
-            print("It says, \"You made it past the last one?  Bah!  You will not beat my next minion.  You shall forever pay for what you did to me and my family!\"")
-            Snape = Enemy('Snape', [Attack('magic flames', 5, 'cursed fire'), Attack('Avada Kedavra', 10, 'None')], 25, ['orc armor', "Snape's wand"])
-            while player.HP > 0.1 and Snape.HP > 0.1:
-                player.attack(Snape)
-                if Snape.HP > 0.1:
-                    Snape.attack(player)
-            if Snape.HP < 0.1:
-                Snape.drop()
-                print("You unlocked new baddies!")
-                sleep(1)
-                print("Snape's minion unlocked!")
-                snapeminion = Enemy("Snape's minion", [Attack("Avada Kedavra", 10, 'None')], 5, ['healthpotion', 'cursed flames'])
-                enemies.append(snapeminion)        
+                enemies = [skeleton, skeleton, skeleton, skeleton, skeleton, livingjaw, livingjaw, livingjaw, snake, snake, snake, spider, spider]   
         for a in enemies:
             a.HP = a.HPlimit
     # endgame
