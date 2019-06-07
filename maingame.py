@@ -58,7 +58,7 @@ class Person:
                 self.healthpotions -= 1
         if whattodo == 'Wait':
             print("You wait for", currentenemy.name, "'s attack, hoping to dodge it.")
-            waited = True
+            self.waited = True
         if whattodo == 'Flee':
             dice = [1, 2]
             import random
@@ -80,15 +80,30 @@ class Person:
             for a in player.attacks:
                 print(a)
         if whattodo == 'heal':
-            print("How many potions would you like to drink?")
-            try:
-                drink = int(input())
-                # drink said number of healthpotions
-                if drink > player.healthpotions:
-                    drink = player.healthpotions
-                player.HP += drink * 2.5
+            leave = False
+            while not leave:
+                try:
+                    print("How many potions would you like to drink?")
+                    drink = int(input())
+                    # drink said number of healthpotions
+                    if drink > player.healthpotions:
+                        drink = player.healthpotions
+                    if not player.HP > player.HPlimit:
+                        print("You drink", drink, "health potions.")
+                        player.HP += drink * 2.5
+                    else:
+                        print("You have too much health!")
+                        leave = True
+                    except ValueError:
+                        print("Input a number!")
         if whattodo == 'l3v3l':
-            player.level = input() - 1
+            leave = False
+            while not leave:
+                try:
+                    player.level = int(input()) - 1
+                except ValueError:
+                    continue
+                leave = True
         return player.level + 1
 
 # Attack class
