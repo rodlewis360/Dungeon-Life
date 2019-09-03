@@ -20,7 +20,5 @@ New gear and cheat codes!
 N/A)Undetermined.  Most likely same as chrome.
 
 
-### Updates.py:
-Unstable version, used for experimental gameplay.
 ##### Currently:
-Beta v1.1.0
+Beta v1.1.1
