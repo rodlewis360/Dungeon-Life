@@ -71,39 +71,47 @@ class Person:
     # Fuction for in between levels
     def between(player, obj):
         print("What would you like to do while you're safe?")
-        whattodo = input()
-        if whattodo == 'show':
-            # show stuff
-            print("HP:", player.HP)
-            print("HP limit:", player.HPlimit)
-            print("attacks:")
-            for a in player.attacks:
-                print(a)
-        if whattodo == 'heal':
-            leave = False
-            while not leave:
-                try:
-                    print("How many potions would you like to drink?")
-                    drink = int(input())
-                    # drink said number of healthpotions
-                    if drink > player.healthpotions:
-                        drink = player.healthpotions
-                    if not player.HP > player.HPlimit:
-                        print("You drink", drink, "health potions.")
-                        player.HP += drink * 2.5
-                    else:
-                        print("You have too much health!")
-                        leave = True
-                except ValueError:
-                    print("Input a number!")
-        if whattodo == 'l3v3l':
-            leave = False
-            while not leave:
-                try:
-                    player.level = int(input()) - 1
-                except ValueError:
-                    continue
+        leave = False
+        while not leave:
+            whattodo = input()
+            if whattodo == "leave":
                 leave = True
+            if whattodo == 'show':
+                # show stuff
+                print("HP:", player.HP)
+                print("HP limit:", player.HPlimit)
+                print("healthpotions:", player.healthpotions)
+                print("level:", player.level)
+                print("attacks:")
+                for a in player.attacks:
+                    print(a)
+            if whattodo == 'Heal':
+                leave2 = False
+                print("HP:", player.HP)
+                print("healthpotions:", player.healthpotions)
+                while not leave2:
+                    try:
+                        print("How many potions would you like to drink?")
+                        drink = int(input())
+                        # drink said number of healthpotions
+                        if drink > player.healthpotions:
+                            drink = player.healthpotions
+                        if not player.HP > player.HPlimit:
+                            print("You drink", drink, "health potions.")
+                            player.HP += drink * 2.5
+                            leave2 = True
+                        else:
+                            print("You have too much health!")
+                    except ValueError:
+                        print("Input a number!")
+            if whattodo == 'l3v3l':
+                leave3 = False
+                while not leave3:
+                    try:
+                        player.level = int(input()) - 1
+                    except ValueError:
+                        continue
+                    leave3 = True
         return player.level + 1
 
 # Attack class
@@ -145,6 +153,7 @@ class Enemy:
             currentperson.waited = False
             currentperson.effect = attack.effect
         else:
+            dice = [1, 2]
             diceroll = random.choice(dice)
             if diceroll == 1:
                 print(self.name, "missed you while trying to do", attack.name, ".")
@@ -158,16 +167,32 @@ class Enemy:
             # drop effects
             if drop == 'iron armor':
                 if currentperson.HPlimit < 15:
+                    oldHPlimit = currentperson.HPlimit
+                    oldHP = currentperson.HP
                     currentperson.HPlimit = 15
+                    currentperson.HP += HPlimit - HP
+                    currentperson.HP -= oldHPlimit - oldHP
             if drop == 'steel armor':
                 if currentperson.HPlimit < 20:
+                    oldHPlimit = currentperson.HPlimit
+                    oldHP = currentperson.HP
                     currentperson.HPlimit = 20
+                    currentperson.HP += HPlimit - HP
+                    currentperson.HP -= oldHPlimit - oldHP
             if drop == 'orc armor':
                 if currentperson.HPlimit < 30:
+                    oldHPlimit = currentperson.HPlimit
+                    oldHP = currentperson.HP
                     currentperson.HPlimit = 30
+                    currentperson.HP += HPlimit - HP
+                    currentperson.HP -= oldHPlimit - oldHP
             if drop == 'armor of Paul Revere':
                 if currentperson.HPlimit < 40:
+                    oldHPlimit = currentperson.HPlimit
+                    oldHP = currentperson.HP
                     currentperson.HPlimit = 40
+                    currentperson.HP += HPlimit - HP
+                    currentperson.HP -= oldHPlimit - oldHP
             if drop == 'sword':
                 sword = Attack('sword', 3.5, 'None')
                 currentperson.attacks['sword'] = sword
@@ -195,8 +220,8 @@ def DungeonLife():
     import random
     monsterskilled = 0
     # define 'snake' and 'spider'
-    snake = Enemy('Snake', [Attack('bite', 2.5, 'poison'), Attack('spit', 1, 'None')], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks'], 'None')
-    spider = Enemy('Spider', [Attack('bite', 2.5, 'poison'), Attack('web', 1.5, 'heal')], 2.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
+    snake = Enemy('Snake', [Attack('bite', 2, 'poison'), Attack('spit', 1, 'None')], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks'], 'None')
+    spider = Enemy('Spider', [Attack('bite', 2.5, 'poison'), Attack('web', 1.5, 'heal')], 3.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
     # Start game
     enemies = [snake, snake, snake, spider, spider]
     print("You wake up in a dungeon, feeling nautious.")
@@ -223,8 +248,6 @@ def DungeonLife():
         # drop system
         if enemy.HP < 0.1:
             enemy.drop(player)
-        if player.HP > 0.1:
-            player.level += 1
         # Medusa boss battle
         if player.level == 15:
             print("You find a tablet bearing this message:")
@@ -269,7 +292,7 @@ def DungeonLife():
                 sleep(1)
                 print("Snape's minion unlocked!")
                 snapeminion = Enemy("Snape's minion", [Attack("Avada Kedavra", 10, 'None')], 5, ['healthpotion', 'cursed flames'])
-                enemies.append(snapeminion)        
+                enemies.append(snapeminion)
         for a in enemies:
             a.HP = a.HPlimit
     # endgame
