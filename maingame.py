@@ -11,7 +11,7 @@ class Person:
         self.waited = waited
         self.effect = effect
         self.level = level
-        self.effectlist = effectlist
+        self.effectlist = effectlist 
     # this is the attack section
     def attack(self, currentenemy):
         # check for effects
