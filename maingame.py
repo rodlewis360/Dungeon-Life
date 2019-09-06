@@ -3,7 +3,7 @@ import random
 # Only ever going to be used for a player.
 class Person:
     # initiate
-    def __init__(self, HP, attacks, HPlimit, healthpotions, waited, effect, level):
+    def __init__(self, HP, attacks, HPlimit, healthpotions, waited, effect, effectlist, level):
         self.HP = HP
         self.attacks = attacks
         self.HPlimit = HPlimit
@@ -11,25 +11,32 @@ class Person:
         self.waited = waited
         self.effect = effect
         self.level = level
+        self.effectlist = effectlist
     # this is the attack section
     def attack(self, currentenemy):
         # check for effects
         try:
             if self.effect == 'fire':
-                self.HP -= 1
+                effectlist.append('fire')
             if self.effect == 'poison':
-                self.HP -= 0.5
+                effectlist.append('poison')
             if self.effect == 'cursed fire':
-                self.HP -= 1.5
+                effectlist.append('cursed fire')
             if self.effect == 'electricity':
                 self.HP -= 2
-                currentenemy.HP -= 0.5
+                currentenemy.HP -= 2
                 self.effect = 'None'
             if self.effect == 'heal':
                 currentenemy.HP += 0.5
                 self.effect = 'None'
         except NameError:
-            self.effect = 'None'
+            pass
+        if 'fire' in effectlist:
+            self.HP -= 1
+        if 'cursed fire' in effectlist:
+            self.HP -= 1.5
+        if 'poison' in effectlist:
+            self.HP -= 0.5
         import random
         # Ask for what to do?
         print("What would you like to do(Attack, Heal, Wait, or Flee)?")
@@ -39,15 +46,21 @@ class Person:
         if whattodo == 'Attack':
             print("What attack would you like to use?")
             # print out available attacks
+            leave = False
+            while not leave:
             for a in self.attacks:
                 print(a)
             attack = input()
             # deal damage
             for a in self.attacks:
                 if a == attack:
+                    leave = True
                     print("You use", a, "doing", self.attacks.get(a).damage, "damage.  It has", self.attacks.get(a).effect, "effect.")
-                    currentenemy.HP -= self.attacks.get(attack).damage
-                    currentenemy.effect = self.attacks.get(attack).effect
+                    if not self.effect == "shield":
+                        currentenemy.HP -= self.attacks.get(attack).damage
+                        currentenemy.effect = self.attacks.get(attack).effect
+                    else:
+                        self.effect = "None"
         # Healing section
         if whattodo == 'Heal':
             if self.HP + 2.5 > self.HPlimit:
@@ -131,27 +144,39 @@ class Enemy:
         self.effect = effect
         self.HPlimit = HP
     def attack(self, currentperson, ran):
-        # check for effects and deal damage accordingly
-        if self.effect == 'poison':
-            self.HP -= 0.5
-        if self.effect == 'fire':
+        # check for effects
+        try:
+            if self.effect == 'fire':
+                effectlist.append('fire')
+            if self.effect == 'poison':
+                effectlist.append('poison')
+            if self.effect == 'cursed fire':
+                effectlist.append('cursed fire')
+            if self.effect == 'electricity':
+                self.HP -= 2
+                currentperson.HP -= 2
+                self.effect = 'None'
+            if self.effect == 'heal':
+                currentperson.HP += 5
+                self.effect = 'None'
+        except NameError:
+            pass
+        if 'fire' in effectlist:
             self.HP -= 1
-        if self.effect == 'cursed fire':
+        if 'cursed fire' in effectlist:
             self.HP -= 1.5
-        if self.effect == 'electricity':
-            self.HP -= 2
-            currentperson.HP -= 0.5
-            self.effect = 'None'
-        if self.effect == 'heal':
-            currentperson.HP += 1.5
-            self.effect = 'None'
+        if 'poison' in effectlist:
+            self.HP -= 0.5
         # attack the player
         attack = random.choice(self.attacks)
         if currentperson.waited != True:
             print(self.name, "used", attack.name, "doing", attack.damage, "damage.  It has", attack.effect, "effect.")
-            currentperson.HP -= attack.damage
-            currentperson.waited = False
-            currentperson.effect = attack.effect
+            if not self.effect == 'shield':
+                currentperson.HP -= attack.damage
+                currentperson.waited = False
+                currentperson.effect = attack.effect
+            else:
+                self.effect = 'None'
         else:
             dice = [1, 2]
             diceroll = random.choice(dice)
@@ -193,9 +218,26 @@ class Enemy:
                     currentperson.HPlimit = 40
                     currentperson.HP += HPlimit - HP
                     currentperson.HP -= oldHPlimit - oldHP
+            if drop == 'rock armor':
+                if currentperson.HPlimit < 65:
+                    oldHPlimit = currentperson.HPlimit
+                    oldHP = currentperson.HP
+                    currentperson.HPlimit = 65
+                    currentperson.HP += HPlimit - HP
+                    currentperson.HP -= oldHPlimit - oldHP
+            if drop == 'titanium armor':
+                if currentperson.HPlimit < 100:
+                    oldHPlimit = currentperson.HPlimit
+                    oldHP = currentperson.HP
+                    currentperson.HPlimit = 100
+                    currentperson.HP += HPlimit - HP
+                    currentperson.HP -= oldHPlimit - oldHP
             if drop == 'sword':
                 sword = Attack('sword', 3.5, 'None')
                 currentperson.attacks['sword'] = sword
+            if drop == 'rock club':
+                club = Attack('club', 10, 'None')
+                currentperson.attacks['club' = club]
             if drop == 'poison fang':
                 poison_fang = Attack('poison fang', 5, 'poison')
                 currentperson.attacks['poison fang'] = poison_fang
@@ -208,8 +250,20 @@ class Enemy:
             if drop == 'healthpotion':
                 currentperson.healthpotions += 1
             if drop == 'health tomb':
-                health_tomb = Attack('health tomb', 0, 'heal')
+                health_tomb = Attack('health tomb', 5, 'heal')
                 currentperson.attacks['health tomb'] = health_tomb
+            if drop == "Snape's wand":
+                wand = Attack("wand", 7.5, 'None')
+                currentperson.attacks['wand'] = wand
+            if drop == 'electric staff':
+                electricity = Attack('electricity', 10, 'electricity')
+                currentperson.attacks['electricity'] = electricity
+            if drop == 'fireball':
+                fireball = Attack('fireball', 10, 'fire')
+                currentperson.attacks['fireball'] = fireball
+            if drop == 'plant':
+                plant = Attack('plant', 10, 'shield')
+                currentperson.attacks['plant'] = plant
             print(self.name, "dropped", drop, ".")
         except NameError:
             print(self.name, "dropped nothing.")
@@ -291,10 +345,93 @@ def DungeonLife():
                 print("You unlocked new baddies!")
                 sleep(1)
                 print("Snape's minion unlocked!")
-                snapeminion = Enemy("Snape's minion", [Attack("Avada Kedavra", 10, 'None')], 5, ['healthpotion', 'cursed flames'])
+                snapeminion = Enemy("Snape's minion", [Attack("Avada Kedavra", 10, 'None')], 10, ['healthpotion', 'cursed flames'])
                 enemies.append(snapeminion)
+        #refill health for enemies
         for a in enemies:
             a.HP = a.HPlimit
+        #Groyle boss battle
+        if player.level = 45:
+            sleep(1)
+            print("These tablets can't be a coincidence anymore.")
+            sleep(1)
+            print("You look at the tablet and are pulled into a different world.")
+            sleep(1)
+            print("You see a big monster in a forest. \"Die!\", it says.")
+            sleep(1)
+            print("You pull out your weapon and get ready for battle.")
+            Groyle = Enemy('Groyle', [Attack('smash', 10, 'None')], 50, ['rock armor', 'rock club'], 'None')
+            while player.HP > 0.1 and Groyle.HP > 0.1:
+                player.attack(Groyle)
+                if Groyle.HP > 0.1:
+                    Groyle.attack(player)
+            if Groyle.HP < 0.1:
+                Groyle.drop()
+                sleep(1)
+                print("You're glad you got that out of the way.")
+                sleep(1)
+                print("You look back at the tablet again and are sucked back into the dungeon.")
+                sleep(1)
+                print("You unlocked new baddies!")
+                sleep(1)
+                print("Giant Rock unlocked!")
+                rock = Enemy('Giant Rock', [Attack('smash', 5, 'None'), Attack('shield', 0, 'shield')])
+                enemies = [snake, spider, skeleton, skeleton, livingjaw, livingjaw, livingjaw, snapeminion, snapeminion, snapeminion, snapeminion, rock, rock, rock, rock, rock]
+        # Four Titans boss battle
+        if player.level == 60:
+            sleep(1)
+            print("As you move to the next room of the dungeon, you think about the Four Titans you read in books.")
+            sleep(1)
+            print("You don't know how you remember this; all you remember is vague images of them while sitting by a warm fireplace.")
+            sleep(1)
+            print("It seems you are regaining your memories.")
+            sleep(1)
+            print("Before you can think much more on the subject, though, the Four Titans themselves come around the corner!")
+            sleep(1)
+            Titans = Enemy('The Titans',[Attack('Electric Shock', 12, 'electricity'), Attack("Fire Blast", 12, 'fire'), Attack("Earth Smash", 15, 'None'), Attack('Regrowth', 3, 'heal')], 100, ['electric staff', 'fireball', 'titanium armor', 'plant'], 'None')
+            while player.HP > 0.1 and Titans.HP > 0.1:
+                player.attack(Titans)
+                if Titans.HP > 0.1:
+                    Titans.attack(player)
+            if Titans.HP > 0.1:
+                Titans.drop()
+                sleep(1)
+                print("By this point, you are so frustrated by these 'minions' that you shout out, 'WHO IS THERE?  WHY ARE YOU DOING THIS TO ME?  I DON'T EVEN RECALL MY PAST!'")
+                sleep(2)
+                print("A witch pops out of nowhere as soon as you say that.")
+                sleep(1)
+                print("'Ah, lovely. You finally decide to open your solemn mouth that once yelled traitorous words.")
+                sleep(1)
+                print("'You realize that you are down here for a reason, right?")
+                sleep(1)
+                print("'You may not know what is or has happened, but the truth will startle you...'")
+                sleep(1)
+                print("The witch cackles with an evil laugh and disapears.")
+                sleep(1)
+                print("You shout again, 'What did I d-', you stumble with the last word as you are sucked into what seems like a dream.")
+                sleep(2)
+                print("You are on a plane, in the pilot's seat, with a chained man behind you.  'MMM MM MMMMMM!', the pilot says.")
+                sleep(1)
+                print("You try to do something but realize you are having a flashback.")
+                sleep(1)
+                print("You push down on the controls as you nose dive into a building...")
+                sleep(1)
+                print("BOOM!...")
+                sleep(3)
+                print("You hear people screaming as everything fades to black...")
+                sleep(5)
+                print("When you wake up, you are in the dungeon again, feeling nautious.")
+                sleep(1)
+                print("Then you are sucked out of the dream and find the four dead titans next to you.")
+                sleep(1)
+                print("Once you realize what you did, you feel a crushing despair.")
+                sleep(1)
+                print("And then comes a longing for your wife and children, to apologize for what you have done.")
+                sleep(1)
+                print("'Jenna', you say, falling to your knees, 'what have I done?'")
+                sleep(1)
+                print("You hope the world, especially Jenna, will forgive you for 9/11 if you ever make it out of this rightful punishment alive.")
+                sleep(1)
     # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
