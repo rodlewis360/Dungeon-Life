@@ -1,123 +1,127 @@
+#!usr/bin/python
 from time import sleep
 import random
+
+
 # Only ever going to be used for a player.
 class Person:
     # initiate
-    def __init__(self, HP, attacks, HPlimit, healthpotions, waited, effect, effectlist, level):
+    def __init__(self, HP, attacks, HPlimit):
         self.HP = HP
         self.attacks = attacks
         self.HPlimit = HPlimit
-        self.healthpotions = healthpotions
-        self.waited = waited
-        self.effect = effect
-        self.level = level
-        self.effectlist = effectlist 
+        self.waited = False
+        self.effect = "None"
+        self.level = 0
+        self.effectlist = []
+        lst = []
+        for a in range(0, 3):
+            lst.append(Item('healthpotion'))
+        for a in range(0, 3):
+            lst.append(Item('potion'))
+        self.items = {}
+        for a in lst:
+            self.items[a.ID] = a
+        self.dimension = "Normal"
+        self.dimensionnumber = 0
+
     # this is the attack section
     def attack(self, currentenemy):
         # check for effects
-        try:
-            if self.effect == 'fire':
-                effectlist.append('fire')
-            if self.effect == 'poison':
-                effectlist.append('poison')
-            if self.effect == 'cursed fire':
-                effectlist.append('cursed fire')
-            if self.effect == 'electricity':
-                self.HP -= 2
-                currentenemy.HP -= 2
-                self.effect = 'None'
-            if self.effect == 'heal':
-                currentenemy.HP += 0.5
-                self.effect = 'None'
-        except NameError:
-            pass
-        if 'fire' in effectlist:
+        if 'electricity' in self.effectlist:
+            self.HP -= 2
+            currentenemy.HP -= 2
+            self.effect = 'None'
+        if 'heal' in self.effectlist:
+            currentenemy.HP += 0.5
+            self.effect = 'None'
+        if 'fire' in self.effectlist:
             self.HP -= 1
-        if 'cursed fire' in effectlist:
+        if 'cursed fire' in self.effectlist:
             self.HP -= 1.5
-        if 'poison' in effectlist:
-            self.HP -= 0.5
+        if 'poison' in self.effectlist:
+            self.HP -= 2
         import random
         # Ask for what to do?
-        print("What would you like to do(Attack, Heal, Wait, or Flee)?")
-        print("You have", self.HP, "HP. ", currentenemy.name, "has", currentenemy.HP, "HP.")
-        whattodo = input()
+        print("What would you like to do(Attack, Use, Wait, or Flee)?")
+        print("You have", self.HP, "HP. ", currentenemy.name, "has",
+              currentenemy.HP, "HP.")
+        whattodo = input().lower()
         # Attack process
-        if whattodo == 'Attack':
+        if whattodo == 'attack':
             print("What attack would you like to use?")
             # print out available attacks
             leave = False
             while not leave:
-            for a in self.attacks:
-                print(a)
-            attack = input()
-            # deal damage
-            for a in self.attacks:
-                if a == attack:
-                    leave = True
-                    print("You use", a, "doing", self.attacks.get(a).damage, "damage.  It has", self.attacks.get(a).effect, "effect.")
-                    if not self.effect == "shield":
-                        currentenemy.HP -= self.attacks.get(attack).damage
-                        currentenemy.effect = self.attacks.get(attack).effect
-                    else:
-                        self.effect = "None"
-        # Healing section
-        if whattodo == 'Heal':
-            if self.HP + 2.5 > self.HPlimit:
-                print("You have too much health.")
-            else:
-                print("You drink 1 health potion.")
-                self.HP += 2.5
-                self.healthpotions -= 1
-        if whattodo == 'Wait':
-            print("You wait for", currentenemy.name, "'s attack, hoping to dodge it.")
-            self.waited = True
-        if whattodo == 'Flee':
-            dice = [1, 2]
-            import random
-            diceroll = random.choice(dice)
-            if diceroll == 1:
-                print("You run away, your feet flying.")
-                # variable "run"
-                return True
-        return False
-    # Fuction for in between levels
+                for a in self.attacks:
+                    print(a)
+                attack = input()
+                # deal damage
+                for a in self.attacks:
+                    if a == attack:
+                        leave = True
+                        print("You use", a, "doing",
+                              self.attacks.get(a).damage, "damage.  It has",
+                              self.attacks.get(a).effect, "effect.")
+                        if not 'shield' in self.effectlist:
+                            currentenemy.HP -= self.attacks.get(attack).damage
+                            currentenemy.effectlist.append(
+                                self.attacks.get(attack).effect)
+                            leave = True
+                        else:
+                            self.effectlist.remove('shield')
+                            print("You were blocked!")
+            # Healing section
+        if whattodo == "use":
+            try:
+                print("You can use:")
+                for a in self.items:
+                    print(self.items.get(a).name)
+                whattodo = input()
+                for a in self.items:
+                    if self.items.get(a).name == whattodo:
+                        self.items.get(a).use(self)
+                        del (self.items[a])
+                        break
+            except NameError:
+                print("THAT'S NOT AN ITEM!")
+            if whattodo == 'wait':
+                print("You wait for", currentenemy.name,
+                      "'s attack, hoping to dodge it.")
+                self.waited = True
+            if whattodo == 'flee':
+                dice = [1, 2]
+                import random
+                diceroll = random.choice(dice)
+                if diceroll == 1:
+                    print("You run away, your feet flying.")
+                    # variable "run"
+                    return True
+            return False
+
+    # Function for in between levels
     def between(player, obj):
         print("What would you like to do while you're safe?")
         leave = False
         while not leave:
-            whattodo = input()
+            whattodo = input().lower()
             if whattodo == "leave":
                 leave = True
             if whattodo == 'show':
-                # show stuff
-                print("HP:", player.HP)
-                print("HP limit:", player.HPlimit)
-                print("healthpotions:", player.healthpotions)
+                print("HP:", player.HP, "/", player.HPlimit)
                 print("level:", player.level)
+                print("dimension:", player.dimension)
+                print("effects:")
+                for a in player.effectlist:
+                    print(a)
+                print("items:")
+                for a in player.items:
+                    print(player.items.get(a).name)
                 print("attacks:")
                 for a in player.attacks:
                     print(a)
-            if whattodo == 'Heal':
-                leave2 = False
-                print("HP:", player.HP)
-                print("healthpotions:", player.healthpotions)
-                while not leave2:
-                    try:
-                        print("How many potions would you like to drink?")
-                        drink = int(input())
-                        # drink said number of healthpotions
-                        if drink > player.healthpotions:
-                            drink = player.healthpotions
-                        if not player.HP > player.HPlimit:
-                            print("You drink", drink, "health potions.")
-                            player.HP += drink * 2.5
-                            leave2 = True
-                        else:
-                            print("You have too much health!")
-                    except ValueError:
-                        print("Input a number!")
             if whattodo == 'l3v3l':
+                # cheat code
                 leave3 = False
                 while not leave3:
                     try:
@@ -125,7 +129,29 @@ class Person:
                     except ValueError:
                         continue
                     leave3 = True
-        return player.level + 1
+            if whattodo == "use":
+                print("You can use:")
+                for a in player.items:
+                    print(player.items.get(a).name)
+                whattodo = input()
+                for a in player.items:
+                    if player.items.get(a).name == whattodo:
+                        player.items.get(a).use(player)
+                        del (player.items[a])
+                        break
+            if whattodo == "m4k3":
+                #also cheat code
+                leave3 = False
+                print("drop (as documented in code):")
+                randomenemy = Enemy("randomenemy", [], 0, [input()], [])
+                print("How many?")
+                try:
+                    for a in range(0, int(input())):
+                        randomenemy.drop(player)
+                except ValueError:
+                    print("try again...")
+        return player.level + 1, player.dimension
+
 
 # Attack class
 class Attack:
@@ -134,110 +160,135 @@ class Attack:
         self.damage = damage
         self.effect = effect
 
+
+class universal:
+    def __init___(self, ID):  #add any universal variables here
+        self.id = ID
+
+
+universal = universal()
+universal.ID = 1
+
+
 # enemies
 class Enemy:
-    def __init__(self, name, attacks, HP, drops, effect):
+    def __init__(self, name, attacks, HP, drops, effectlist):
         self.name = name
         self.attacks = attacks
         self.HP = HP
         self.drops = drops
-        self.effect = effect
+        self.effectlist = effectlist
         self.HPlimit = HP
+
     def attack(self, currentperson, ran):
         # check for effects
-        try:
-            if self.effect == 'fire':
-                effectlist.append('fire')
-            if self.effect == 'poison':
-                effectlist.append('poison')
-            if self.effect == 'cursed fire':
-                effectlist.append('cursed fire')
-            if self.effect == 'electricity':
-                self.HP -= 2
-                currentperson.HP -= 2
-                self.effect = 'None'
-            if self.effect == 'heal':
-                currentperson.HP += 5
-                self.effect = 'None'
-        except NameError:
-            pass
-        if 'fire' in effectlist:
+        if 'electricity' in self.effectlist:
+            self.HP -= 2
+            currentperson.HP -= 2
+            self.effectlist.remove('electricity')
+        if 'heal' in self.effectlist:
+            currentperson.HP += 5
+            self.effectlist.remove('heal')
+        if 'fire' in self.effectlist:
             self.HP -= 1
-        if 'cursed fire' in effectlist:
+        if 'cursed fire' in self.effectlist:
             self.HP -= 1.5
-        if 'poison' in effectlist:
-            self.HP -= 0.5
+        if 'poison' in self.effectlist:
+            self.HP -= 2
         # attack the player
         attack = random.choice(self.attacks)
         if currentperson.waited != True:
-            print(self.name, "used", attack.name, "doing", attack.damage, "damage.  It has", attack.effect, "effect.")
-            if not self.effect == 'shield':
+            print(self.name, "used", attack.name, "doing", attack.damage,
+                  "damage.  It has", attack.effect, "effect.")
+            if not 'shield' in self.effectlist:
                 currentperson.HP -= attack.damage
                 currentperson.waited = False
-                currentperson.effect = attack.effect
+                if not attack.effect == 'None': 
+                    currentperson.effectlist.append(attack.effect)
             else:
-                self.effect = 'None'
+                self.effectlist.remove('shield')
+                print("But you blocked the attack!")
         else:
             dice = [1, 2]
             diceroll = random.choice(dice)
             if diceroll == 1:
-                print(self.name, "missed you while trying to do", attack.name, ".")
+                print(self.name, "missed you while trying to do", attack.name,
+                      ".")
             else:
-                print(self.name, "used", attack.name, "doing", attack.damage, "damage.")
+                print(self.name, "used", attack.name, "doing", attack.damage,
+                      "damage.")
                 currentperson.HP -= attack.damage
-                currentperson.effect = attack.effect
-    def drop(self, currentperson):
-        try:
+                currentperson.effectlist.append(attack.effect)
+
+    def drop(self, currentperson, drop=''):
+        if drop == '':
             drop = random.choice(self.drops)
-            # drop effects
+        try:
+            #=============================ARMORS============================================#
+            # drop items
             if drop == 'iron armor':
                 if currentperson.HPlimit < 15:
                     oldHPlimit = currentperson.HPlimit
                     oldHP = currentperson.HP
                     currentperson.HPlimit = 15
-                    currentperson.HP += HPlimit - HP
+                    currentperson.HP = currentperson.HPlimit
                     currentperson.HP -= oldHPlimit - oldHP
             if drop == 'steel armor':
                 if currentperson.HPlimit < 20:
                     oldHPlimit = currentperson.HPlimit
                     oldHP = currentperson.HP
                     currentperson.HPlimit = 20
-                    currentperson.HP += HPlimit - HP
+                    currentperson.HP = HPlimit
                     currentperson.HP -= oldHPlimit - oldHP
             if drop == 'orc armor':
                 if currentperson.HPlimit < 30:
                     oldHPlimit = currentperson.HPlimit
                     oldHP = currentperson.HP
                     currentperson.HPlimit = 30
-                    currentperson.HP += HPlimit - HP
+                    currentperson.HP = currentperson.HPlimit
                     currentperson.HP -= oldHPlimit - oldHP
             if drop == 'armor of Paul Revere':
                 if currentperson.HPlimit < 40:
                     oldHPlimit = currentperson.HPlimit
                     oldHP = currentperson.HP
                     currentperson.HPlimit = 40
-                    currentperson.HP += HPlimit - HP
+                    currentperson.HP = currentperson.HPlimit
                     currentperson.HP -= oldHPlimit - oldHP
             if drop == 'rock armor':
                 if currentperson.HPlimit < 65:
                     oldHPlimit = currentperson.HPlimit
                     oldHP = currentperson.HP
                     currentperson.HPlimit = 65
-                    currentperson.HP += HPlimit - HP
+                    currentperson.HP = currentperson.HPlimit
                     currentperson.HP -= oldHPlimit - oldHP
             if drop == 'titanium armor':
                 if currentperson.HPlimit < 100:
                     oldHPlimit = currentperson.HPlimit
                     oldHP = currentperson.HP
                     currentperson.HPlimit = 100
-                    currentperson.HP += HPlimit - HP
+                    currentperson.HP = currentperson.HPlimit
                     currentperson.HP -= oldHPlimit - oldHP
+            if drop == 'evil armor':
+                if currentperson.HPlimit < 120:
+                    oldHPlimit = currentperson.HPlimit
+                    oldHP = currentperson.HP
+                    currentperson.HPlimit = 120
+                    currentperson.HP = currentperson.HPlimit
+                    currentperson.HP -= oldHPlimit - oldHP
+            if drop == 'super armor':
+                if currentperson.HPlimit < 1000:
+                    oldHPlimit = currentperson.HPlimit
+                    oldHP = currentperson.HP
+                    currentperson.HPlimit = 1000
+                    currentperson.HP = currentperson.HPlimit
+                    currentperson.HP -= oldHPlimit - oldHP
+#======================================================ATTACKS=================================#
             if drop == 'sword':
                 sword = Attack('sword', 3.5, 'None')
                 currentperson.attacks['sword'] = sword
             if drop == 'rock club':
                 club = Attack('club', 10, 'None')
-                currentperson.attacks['club' = club]
+                currentperson.attacks['club'] = club
             if drop == 'poison fang':
                 poison_fang = Attack('poison fang', 5, 'poison')
                 currentperson.attacks['poison fang'] = poison_fang
@@ -245,13 +296,13 @@ class Enemy:
                 sparks = Attack('sparks', 3, 'electricity')
                 currentperson.attacks['sparks'] = sparks
             if drop == 'cursed flames':
-                cursed_flames = Attack('cursed flames', 7.5, 'cursed fire')
+                cursed_flames = Attack('cursed flames', 5, 'cursed fire')
                 currentperson.attacks['cursed flames'] = cursed_flames
-            if drop == 'healthpotion':
-                currentperson.healthpotions += 1
             if drop == 'health tomb':
-                health_tomb = Attack('health tomb', 5, 'heal')
+                health_tomb = Attack('health tomb', 2.5, 'heal')
                 currentperson.attacks['health tomb'] = health_tomb
+                healthtomb = Item('healthtomb')
+                currentperson.items['healthtomb'] = healthtomb
             if drop == "Snape's wand":
                 wand = Attack("wand", 7.5, 'None')
                 currentperson.attacks['wand'] = wand
@@ -262,34 +313,163 @@ class Enemy:
                 fireball = Attack('fireball', 10, 'fire')
                 currentperson.attacks['fireball'] = fireball
             if drop == 'plant':
-                plant = Attack('plant', 10, 'shield')
+                plant = Attack('plant', 10, 'heal')
                 currentperson.attacks['plant'] = plant
+            if drop == 'sword of fire':
+                firesword = Attack('fire sword', 6, 'fire')
+                currentperson.attacks['firesword'] = firesword
+            if drop == 'blade of night':
+                nightblade = Attack('nightblade', 10, 'shield')
+                currentperson.attacks['nightblade'] = nightblade
+            if drop == 'instakill':
+                instakill = Attack('kill', 1000, 'cursed fire')
+                currentperson.attacks['kill'] = instakill
+#=================================ITEMS==================================================================================#
+            if drop == 'healthpotion':
+                healthpotion = Item('healthpotion')
+                currentperson.items[healthpotion.ID] = healthpotion
+            if drop == 'key':
+                key = Item('key')
+                currentperson.items[key.ID] = key
+            if drop == 'potion':
+                potion = Item('potion')
+                currentperson.items[potion.ID] = potion
+            if drop == 'superpotion':
+                superpotion = Item('superpotion')
+                currentperson.items[superpotion.ID] = superpotion
             print(self.name, "dropped", drop, ".")
         except NameError:
             print(self.name, "dropped nothing.")
 
+class Item:
+    def __init__(self, name, dimensions=["Normal", "Evil"]):
+        self.name = name
+        if name == 'key':
+            self.dimensions = dimensions
+        self.ID = universal.ID
+        universal.ID += 1
+
+    def use(self, player):
+        print('You used', self.name)
+        if self.name == 'key':
+            player.newlevel = 0
+            player.dimensionnumber += 1
+            player.dimension = self.dimensions[player.dimensionnumber]
+            print(
+                "You turn the key in the air and...  WHOOSH!  You are in another dimension..."
+            )
+        if self.name == 'healthtomb':
+            addhealth = round(
+                player.HPlimit / 3
+            )  # determine how much health will be gained to prevent overflowing
+            if player.HP + addhealth > player.HPlimit:
+                player.HP = player.HPlimit
+            else:
+                player.HP += addhealth
+        if self.name == 'healthpotion':
+            addhealth = round(
+                player.HPlimit / 4,
+                1
+            )  # determine how much health will be gained to prevent overflowing
+            if player.HP + addhealth > player.HPlimit:
+                player.HP = player.HPlimit
+            else:
+                player.HP += addhealth
+        if self.name == 'potion':
+            for a in player.effectlist:
+                player.effectlist.remove(a)
+        if self.name == 'superpotion':
+            addhealth = round(player.HPlimit/4)
+            if player.HP + addhealth > player.HPlimit:
+                player.HP = player.HPlimit
+            else:
+                player.HP += addhealth
+            for a in player.effectlist:
+                player.effectlist.remove(a)
+
+
 def DungeonLife():
-    player = Person(10, { 'stick': Attack('stick', 1.5, 'None'), 'fire': Attack('fire', 2.5, 'fire')}, 10, 5, False, 'None', 0)
+    player = Person(10, {
+        'stick': Attack('stick', 1.5, 'None'),
+        'fire': Attack('fire', 2.5, 'fire')
+    }, 10)
     from time import sleep
     import random
     monsterskilled = 0
-    # define 'snake' and 'spider'
-    snake = Enemy('Snake', [Attack('bite', 2, 'poison'), Attack('spit', 1, 'None')], 5, ['iron armor', 'sword', 'healthpotion', 'healthpotion', 'healthpotion', 'sparks'], 'None')
-    spider = Enemy('Spider', [Attack('bite', 2.5, 'poison'), Attack('web', 1.5, 'heal')], 3.5, ['iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
+    # define enemies
+    snake = Enemy('Snake',
+                  [Attack('bite', 2, 'poison'),
+                   Attack('spit', 1, 'None')], 5, [
+                       'iron armor', 'sword', 'healthpotion', 'healthpotion',
+                       'healthpotion', 'sparks', 'potion', 'potion', 'potion'
+                   ], [])
+    spider = Enemy(
+        'Spider', [Attack('bite', 2.5, 'poison'),
+                   Attack('web', 1.5, 'heal')], 3.5,
+        [
+            'iron armor', 'sword', 'sparks', 'healthpotion', 'healthpotion',
+            'healthpotion', 'potion', 'potion', 'potion'
+        ], [])
+    snapeminion = Enemy("Snape's minion",
+                        [Attack("Avada Kedavra", 10, 'None')], 10,
+                        ['healthpotion', 'cursed flames'], [])
+    skeleton = Enemy('skeleton',
+                     [Attack('claw', 5, 'None'),
+                      Attack('shoot', 7.5, 'Heal')], 15, [
+                          'sword', 'sword', 'sparks', 'sparks', 'sparks',
+                          'healthpotion', 'healthpotion', 'healthpotion',
+                          'healthpotion', 'potion', 'potion', 'potion'
+                      ], [])
+    livingjaw = Enemy('living jaw', [Attack('bite', 7.5, 'poison')], 10,
+                      ['healthpotion'], [])
+    rock = Enemy('Giant Rock',
+                 [Attack('smash', 5, 'None'),
+                  Attack('shield', 0, 'shield')], 35, [
+                      'healthpotion', 'healthpotion', 'healthpotion',
+                      'rock club', 'rock armor', 'potion', 'potion', 'potion'
+                  ], [])
+    eye = Enemy(
+                "Eye",
+                [Attack('stare', 10, 'None'),
+                 Attack('look', 5, 'sheild')], 40, [
+                     'superpotion', 'superpotion', 'superpotion',
+                     'evil armor', 'blade of night'
+                ], [])
+    deathsoul = Enemy(
+                "Death Soul", 
+                [Attack('search', 10, 'heal'),
+                Attack('assault', 50, 'cursed fire')
+                ], 20, ['superpotion', 'evil armor', 'blade of night'], [])
     # Start game
     enemies = [snake, snake, snake, spider, spider]
     print("You wake up in a dungeon, feeling nautious.")
     sleep(1)
     print("You notice you have a stick strapped to your back.")
     sleep(1)
-    print("You also realize you can create fire and you have 5 health potions.")
+    print(
+        "You also realize you can create fire and you have 5 health potions.")
     sleep(1)
     print("You feel the urge to move up, towards the sky!")
     sleep(1)
     print("Good luck, hero!")
+    done = False
     while player.HP > 0.1:
+        if player.dimension == "Evil" and not done:
+            eye = Enemy(
+                "Eye",
+                [Attack('stare', 10, 'None'),
+                 Attack('look', 5, 'sheild')], 40, [
+                     'superpotion', 'superpotion', 'superpotion',
+                     'evil armor', 'blade of night'
+                 ], [])
+            deathsoul = Enemy("Death Soul", [
+                Attack('search', 10, 'heal'),
+                Attack('assault', 50, 'cursed fire')
+            ], 20, ['superpotion', 'evil armor', 'blade of night'], [])
+            enemies = [eye, eye, eye, eye, eye, deathsoul, deathsoul]
+            done = True
         sleep(1)
-        player.level = player.between(player)
+        player.level, player.dimension = player.between(player)
         sleep(2.5)
         enemy = random.choice(enemies)
         print(enemy.name, "jumps out at you!")
@@ -302,140 +482,280 @@ def DungeonLife():
         # drop system
         if enemy.HP < 0.1:
             enemy.drop(player)
+            monsterskilled += 1
+            for a in enemies:
+                enemies.remove(a)
+                enemies.append(a)
         # Medusa boss battle
         if player.level == 15:
-            print("You find a tablet bearing this message:")
+            print("You find a stone tablet bearing this message:")
             sleep(1)
-            print("\"You terrible man!  You took the lives of countless people and now you shall pay!\"")
+            print(
+                "\"You terrible man!  You took the lives of countless people and now you shall pay!\""
+            )
             sleep(1)
             print("You wonder what this is all about.")
             sleep(1)
-            print("You can't worry right now, though, because a monster that looks like Medusa jumps out of a corner!")
+            print(
+                "You can't worry right now, though, because a monster that looks like Medusa jumps out of a corner!"
+            )
             # Medusa battle begins.
-            Medusa = Enemy('Medusa', [Attack('slash', 5), Attack('bite', 2.5), Attack('smash', 7.5)], 25, ['armor of Paul Revere', 'sword of fire', 'cursed flames'], 'None')
+            Medusa = Enemy('Medusa', [
+                Attack('slash', 5, 'None'),
+                Attack('bite', 2.5, 'poison'),
+                Attack('bash', 7.5, 'None')
+            ], 25, ['armor of Paul Revere', 'poison fang', 'cursed flames'],
+                           [])
             while player.HP > 0.1 and Medusa.HP > 0.1:
-                Medusa.attack(player, player.attack(Medusa))
+                ran = player.attack(Medusa)
+                if Medusa.HP > 0.1:
+                    Medusa.attack(player, ran)
             if player.HP > 0.1:
                 # Rewards and unlocks
                 print("You vanquished Medusa!")
-                drop = random.choice(Medusa.drops)
+                Medusa.drop(player)
                 print("Medusa dropped 5 healthpotions, too.")
                 player.healthpotions += 5
-                a = 0
                 print("You unlocked new baddies!")
                 sleep(1)
                 print("Skeleton and Living Jaw unlocked!")
-                skeleton = Enemy('skeleton', [Attack('claw', 5, 'None'), Attack('shoot', 7.5, 'Heal')], 15, ['sword', 'sword', 'sparks', 'sparks', 'sparks', 'healthpotion', 'healthpotion', 'healthpotion', 'healthpotion'], 'None')
-                livingjaw = Enemy('living jaw', [Attack('bite', 7.5, 'poison')], 10, ['healthpotion'], 'None')
-                enemies = [skeleton, skeleton, skeleton, skeleton, skeleton, livingjaw, livingjaw, livingjaw, snake, snake, snake, spider, spider]
+                enemies = [
+                    skeleton, skeleton, skeleton, skeleton, skeleton,
+                    livingjaw, livingjaw, livingjaw, snake, snake, snake,
+                    spider, spider
+                ]
         # Snape boss battle
         # Wow does OOP make programming so much easier!
         if player.level == 30:
             sleep(1)
             print("You found yet another tablet!")
             sleep(1)
-            print("It says, \"You made it past the last one?  Bah!  You will not beat my next minion.  You shall forever pay for what you did to me and my family!\"")
-            Snape = Enemy('Snape', [Attack('magic flames', 5, 'cursed fire'), Attack('Avada Kedavra', 10, 'None')], 25, ['orc armor', "Snape's wand"])
+            print(
+                "It says, \"You made it past the last one?  Bah!  You will not beat my next minion.  You shall forever pay for what you did to me and my family!\""
+            )
+            print(
+                "But before you can investigate further, Snape fires something at you!"
+            )
+            Snape = Enemy('Snape', [
+                Attack('magic flames', 5, 'cursed fire'),
+                Attack('Avada Kedavra', 10, 'None')
+            ], 25, ['orc armor', "Snape's wand"], [])
             while player.HP > 0.1 and Snape.HP > 0.1:
                 player.attack(Snape)
                 if Snape.HP > 0.1:
                     Snape.attack(player)
             if Snape.HP < 0.1:
-                Snape.drop()
+                Snape.drop(player)
                 print("You unlocked new baddies!")
                 sleep(1)
                 print("Snape's minion unlocked!")
-                snapeminion = Enemy("Snape's minion", [Attack("Avada Kedavra", 10, 'None')], 10, ['healthpotion', 'cursed flames'])
                 enemies.append(snapeminion)
         #refill health for enemies
         for a in enemies:
             a.HP = a.HPlimit
         #Groyle boss battle
-        if player.level = 45:
+        if player.level == 45:
             sleep(1)
             print("These tablets can't be a coincidence anymore.")
             sleep(1)
-            print("You look at the tablet and are pulled into a different world.")
+            print(
+                "You look at the tablet and are pulled into a different world."
+            )
             sleep(1)
             print("You see a big monster in a forest. \"Die!\", it says.")
             sleep(1)
             print("You pull out your weapon and get ready for battle.")
-            Groyle = Enemy('Groyle', [Attack('smash', 10, 'None')], 50, ['rock armor', 'rock club'], 'None')
+            Groyle = Enemy('Groyle', [Attack('smash', 10, 'None')], 50,
+                           ['rock armor', 'rock club'], [])
             while player.HP > 0.1 and Groyle.HP > 0.1:
                 player.attack(Groyle)
                 if Groyle.HP > 0.1:
                     Groyle.attack(player)
             if Groyle.HP < 0.1:
-                Groyle.drop()
+                Groyle.drop(player)
                 sleep(1)
                 print("You're glad you got that out of the way.")
                 sleep(1)
-                print("You look back at the tablet again and are sucked back into the dungeon.")
+                print(
+                    "You look back at the tablet again and are sucked back into the dungeon."
+                )
                 sleep(1)
                 print("You unlocked new baddies!")
                 sleep(1)
                 print("Giant Rock unlocked!")
-                rock = Enemy('Giant Rock', [Attack('smash', 5, 'None'), Attack('shield', 0, 'shield')])
-                enemies = [snake, spider, skeleton, skeleton, livingjaw, livingjaw, livingjaw, snapeminion, snapeminion, snapeminion, snapeminion, rock, rock, rock, rock, rock]
+                enemies = [
+                    snake, spider, skeleton, skeleton, livingjaw, livingjaw,
+                    livingjaw, snapeminion, snapeminion, snapeminion,
+                    snapeminion, rock, rock, rock, rock, rock
+                ]
         # Four Titans boss battle
         if player.level == 60:
             sleep(1)
-            print("As you move to the next room of the dungeon, you think about the Four Titans you read in books.")
+            print(
+                "As you move to the next room of the dungeon, you think about the Four Titans you read in books."
+            )
             sleep(1)
-            print("You don't know how you remember this; all you remember is vague images of them while sitting by a warm fireplace.")
+            print(
+                "You don't know how you remember this; all you remember is vague images of them while sitting by a warm fireplace."
+            )
             sleep(1)
             print("It seems you are regaining your memories.")
             sleep(1)
-            print("Before you can think much more on the subject, though, the Four Titans themselves come around the corner!")
+            print(
+                "Before you can think much more on the subject, though, the Four Titans themselves come around the corner!"
+            )
             sleep(1)
-            Titans = Enemy('The Titans',[Attack('Electric Shock', 12, 'electricity'), Attack("Fire Blast", 12, 'fire'), Attack("Earth Smash", 15, 'None'), Attack('Regrowth', 3, 'heal')], 100, ['electric staff', 'fireball', 'titanium armor', 'plant'], 'None')
+            Titans = Enemy('The Titans', [
+                Attack('Electric Shock', 12, 'electricity'),
+                Attack("Fire Blast", 12, 'fire'),
+                Attack("Earth Smash", 15, 'None'),
+                Attack('Regrowth', 3, 'heal')
+            ], 100, ['electric staff', 'fireball', 'titanium armor', 'plant'],
+                           [])
             while player.HP > 0.1 and Titans.HP > 0.1:
                 player.attack(Titans)
                 if Titans.HP > 0.1:
                     Titans.attack(player)
-            if Titans.HP > 0.1:
-                Titans.drop()
+            if Titans.HP < 0.1:
+                Titans.drop(player)
                 sleep(1)
-                print("By this point, you are so frustrated by these 'minions' that you shout out, 'WHO IS THERE?  WHY ARE YOU DOING THIS TO ME?  I DON'T EVEN RECALL MY PAST!'")
+                print(
+                    "By this point, you are so frustrated by these 'minions' that you shout out, 'WHO IS THERE?  WHY ARE YOU DOING THIS TO ME?  I DON'T EVEN RECALL MY PAST!'"
+                )
                 sleep(2)
                 print("A witch pops out of nowhere as soon as you say that.")
                 sleep(1)
-                print("'Ah, lovely. You finally decide to open your solemn mouth that once yelled traitorous words.")
+                print(
+                    "'Ah, lovely. You finally decide to open your solemn mouth that once yelled traitorous words."
+                )
                 sleep(1)
-                print("'You realize that you are down here for a reason, right?")
+                print(
+                    "'You realize that you are down here for a reason, right?")
                 sleep(1)
-                print("'You may not know what is or has happened, but the truth will startle you...'")
+                print(
+                    "'You may not know what is or has happened, but the truth will startle you...'"
+                )
                 sleep(1)
                 print("The witch cackles with an evil laugh and disapears.")
                 sleep(1)
-                print("You shout again, 'What did I d-', you stumble with the last word as you are sucked into what seems like a dream.")
+                print(
+                    "You shout again, 'What did I d-?'  You stumble with the last word as you are sucked into what seems like a dream."
+                )
                 sleep(2)
-                print("You are on a plane, in the pilot's seat, with a chained man behind you.  'MMM MM MMMMMM!', the pilot says.")
+                print(
+                    "You are on a plane, in the pilot's seat, with a chained man behind you.  'MMM MM MMMMMM!', the pilot says."
+                )
                 sleep(1)
-                print("You try to do something but realize you are having a flashback.")
+                print(
+                    "You try to do something but realize you are having a flashback."
+                )
                 sleep(1)
-                print("You push down on the controls as you nose dive into a building...")
+                print(
+                    "You push down on the controls as you nose dive into a building..."
+                )
                 sleep(1)
                 print("BOOM!...")
                 sleep(3)
-                print("You hear people screaming as everything fades to black...")
+                print(
+                    "You hear people screaming as everything fades to black..."
+                )
                 sleep(5)
-                print("When you wake up, you are in the dungeon again, feeling nautious.")
+                print(
+                    "When you wake up, you are in the dungeon again, feeling nautious."
+                )
                 sleep(1)
-                print("Then you are sucked out of the dream and find the four dead titans next to you.")
+                print(
+                    "Then you are sucked out of the dream and find the four dead titans next to you."
+                )
                 sleep(1)
-                print("Once you realize what you did, you feel a crushing despair.")
+                print(
+                    "Once you realize what you did, you feel a crushing despair."
+                )
                 sleep(1)
-                print("And then comes a longing for your wife and children, to apologize for what you have done.")
+                print(
+                    "And then comes a longing for your wife and children, to apologize for what you have done."
+                )
                 sleep(1)
-                print("'Jenna', you say, falling to your knees, 'what have I done?'")
+                print(
+                    "'Jenna', you say, falling to your knees, 'what have I done?'"
+                )
                 sleep(1)
-                print("You hope the world, especially Jenna, will forgive you for 9/11 if you ever make it out of this rightful punishment alive.")
+                print(
+                    "You hope the world, especially Jenna, will forgive you for 9/11 if you ever make it out of this rightful punishment alive."
+                )
                 sleep(1)
+        # Clara boss battle
+        if player.level == 75:
+            print(
+                "You hear the cackle of the witch you saw earlier.  You get ready for a fight."
+            )
+            sleep(1)
+            print("She pops out of nowhere.")
+            sleep(1)
+            print("'You.'  You say, simultaneously.")
+            sleep(1)
+            print("The witch says, 'I will end you here and now.'")
+            Clara = Enemy('Clara', [
+                Attack('kill', 20, "None"),
+                Attack('Heal', 10, 'heal'),
+                Attack('guilt', 25, 'None')
+            ], 200, ['key'], [])
+            while player.HP > 0.1 and Clara.HP > 0.1:
+                player.attack(Clara)
+                if Clara.HP > 0.1:
+                    Clara.attack(player)
+            if Clara.HP < 0.1:
+
+                print(
+                    "You feel like you should use the key in the near future.")
+                sleep(1)
+                print(
+                    "You step out onto the surface, but find it is very different."
+                )
+                sleep(1)
+                print(
+                    "From the advanced technology you see, you know that it is years after you commited the crime."
+                )
+                sleep(1)
+                print(
+                    "You also know no one could have survived for the 200 years that you figure you were asleep."
+                )
+                sleep(1)
+                print(
+                    'Tired and defeated, you turn back into your dungeon, the only home you have had and probably will have, and mourn yourself.'
+                )
+                sleep(10)
+                print("Credits:")
+                sleep(0.25)
+                print("Storyline: Rod Lewis")
+                sleep(0.25)
+                print("Code: Rod Lewis")
+                sleep(0.25)
+                print("Game Design: Rod Lewis")
+                sleep(0.25)
+                print("Testing: Mrs. Weiner's Wizard Wales 2018-2019")
+                sleep(0.25)
+                print("Special Thanks to:")
+                sleep(0.25)
+                print('Kelley Weiner')
+                sleep(0.25)
+                print("Ric Lewis")
+                sleep(0.25)
+                print("Noah Pasion")
+                sleep(0.25)
+                print('Finian')
+                sleep(0.25)
+                print("And YOU, for playing!")
+                sleep(5)
+                print(
+                    "If you would like to continue across dimensions, the game will continue in 25 secs."
+                )
+                sleep(25)
     # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
     print("You got to level", player.level, ".")
+
 
 # initiate
 DungeonLife()

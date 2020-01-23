@@ -1,4 +1,4 @@
-=========Additions======================  
--completely object oriented programming  
--All bosses + storyline  
+=========Additions======================     
 -Hotfixes, including cheat code for testing quickly  
+-Dimensions, meaning new gear, bosses, and baddies.
+-Graphics
