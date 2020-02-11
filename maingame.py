@@ -24,8 +24,7 @@ class Person:
             self.items[a.ID] = a
         self.dimension = "Normal"
         self.dimensionnumber = 0
-
-    # this is the attack section
+    # this is the attack section 
     def attack(self, currentenemy):
         # check for effects
         if 'electricity' in self.effectlist:
@@ -81,7 +80,7 @@ class Person:
                 for a in self.items:
                     if self.items.get(a).name == whattodo:
                         self.items.get(a).use(self)
-                        del (self.items[a])
+                        del(self.items[a])
                         break
             except NameError:
                 print("THAT'S NOT AN ITEM!")
@@ -98,7 +97,6 @@ class Person:
                     # variable "run"
                     return True
             return False
-
     # Function for in between levels
     def between(player, obj):
         print("What would you like to do while you're safe?")
@@ -179,7 +177,6 @@ class Enemy:
         self.drops = drops
         self.effectlist = effectlist
         self.HPlimit = HP
-
     def attack(self, currentperson, ran):
         # check for effects
         if 'electricity' in self.effectlist:
@@ -219,7 +216,6 @@ class Enemy:
                       "damage.")
                 currentperson.HP -= attack.damage
                 currentperson.effectlist.append(attack.effect)
-
     def drop(self, currentperson, drop=''):
         if drop == '':
             drop = random.choice(self.drops)
@@ -348,7 +344,6 @@ class Item:
             self.dimensions = dimensions
         self.ID = universal.ID
         universal.ID += 1
-
     def use(self, player):
         print('You used', self.name)
         if self.name == 'key':
@@ -705,7 +700,6 @@ def DungeonLife():
                 if Clara.HP > 0.1:
                     Clara.attack(player)
             if Clara.HP < 0.1:
-
                 print(
                     "You feel like you should use the key in the near future.")
                 sleep(1)
