@@ -1,8 +1,8 @@
-#DungeonLife Release!
+# DungeonLife Release!
 ITS FINALLY DONE!  ONE YEAR OF WORK!
-#A SPECIAL MESSAGE:
+# A SPECIAL MESSAGE:
 Thank you to all my friends and family for helping this dream come true.  Also thank you to my main testers, Mrs. Weiners Wizard Whales 2018-19.  None of this would be possible without your and their support.
-##Notes:
+## Notes:
 DungeonLife Release is just as much of an overhall as beta.  The game storyline is finished.  All the bosses are added and new schematics exist.  Cheat codes will be removed shortly; enjoy them while you can.
 Healthpotions give you a quarter of your health back.  Potoins remove effects.  Both count as Items, the new class for anything that is not armor or an attack.  Keys bring you to new dimensions, which have new baddies and new gear.
 There are, as always, more gears and baddies.
