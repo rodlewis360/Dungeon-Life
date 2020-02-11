@@ -17,4 +17,7 @@ There are, as always, more gears and baddies.
 
 
 ##### Currently:
-Beta v1.2.0
+Release v2.0.0
+
+### Instructions:
+Look at github wiki for instructions and commands.
