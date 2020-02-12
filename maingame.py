@@ -24,7 +24,7 @@ class Person:
             self.items[a.ID] = a
         self.dimension = "Normal"
         self.dimensionnumber = 0
-    # this is the attack section 
+    # this is the attack section
     def attack(self, currentenemy):
         # check for effects
         if 'electricity' in self.effectlist:
@@ -72,18 +72,16 @@ class Person:
                             print("You were blocked!")
             # Healing section
         if whattodo == "use":
-            try:
-                print("You can use:")
-                for a in self.items:
-                    print(self.items.get(a).name)
-                whattodo = input()
-                for a in self.items:
-                    if self.items.get(a).name == whattodo:
-                        self.items.get(a).use(self)
-                        del(self.items[a])
-                        break
-            except NameError:
-                print("THAT'S NOT AN ITEM!")
+            print("You can use:")
+            for a in self.items:
+                print(self.items.get(a).name)
+            whattodo = input()
+            for a in self.items:
+                if self.items.get(a).name == whattodo:
+                    self.items.get(a).use(self
+                    )
+                    del(self.items[a])
+                    break
             if whattodo == 'wait':
                 print("You wait for", currentenemy.name,
                       "'s attack, hoping to dodge it.")
@@ -135,7 +133,7 @@ class Person:
                 for a in player.items:
                     if player.items.get(a).name == whattodo:
                         player.items.get(a).use(player)
-                        del (player.items[a])
+                        del(player.items[a])
                         break
             if whattodo == "m4k3":
                 #also cheat code
@@ -200,7 +198,7 @@ class Enemy:
             if not 'shield' in self.effectlist:
                 currentperson.HP -= attack.damage
                 currentperson.waited = False
-                if not attack.effect == 'None': 
+                if not attack.effect == 'None':
                     currentperson.effectlist.append(attack.effect)
             else:
                 self.effectlist.remove('shield')
@@ -213,9 +211,15 @@ class Enemy:
                       ".")
             else:
                 print(self.name, "used", attack.name, "doing", attack.damage,
-                      "damage.")
-                currentperson.HP -= attack.damage
-                currentperson.effectlist.append(attack.effect)
+                      "damage.  It has", attack.effect, "effect.")
+                if not 'shield' in self.effectlist:
+                    currentperson.HP -= attack.damage
+                    currentperson.waited = False
+                    if not attack.effect == 'None':
+                        currentperson.effectlist.append(attack.effect)
+                else:
+                    self.effectlist.remove('shield')
+                    print("But you blocked the attack!")
     def drop(self, currentperson, drop=''):
         if drop == '':
             drop = random.choice(self.drops)
@@ -431,7 +435,7 @@ def DungeonLife():
                      'evil armor', 'blade of night'
                 ], [])
     deathsoul = Enemy(
-                "Death Soul", 
+                "Death Soul",
                 [Attack('search', 10, 'heal'),
                 Attack('assault', 50, 'cursed fire')
                 ], 20, ['superpotion', 'evil armor', 'blade of night'], [])
@@ -628,7 +632,7 @@ def DungeonLife():
                     "'You realize that you are down here for a reason, right?")
                 sleep(1)
                 print(
-                    "'You may not know what is or has happened, but the truth will startle you...'"
+                    "'You may not know what has happened, but the truth will startle you...'"
                 )
                 sleep(1)
                 print("The witch cackles with an evil laugh and disapears.")
