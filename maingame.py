@@ -3,27 +3,106 @@ from time import sleep
 import random
 
 
+class universal:
+    def __init___(self, ID):  #add any universal variables here
+        self.id = ID
+
+
+universal = universal()
+universal.ID = 7
+
+
+class Item:
+    def __init__(self, name, dimensions=["Normal", "Evil"]):
+        self.name = name
+        if name == 'key':
+            self.dimensions = dimensions
+        self.ID = universal.ID
+        universal.ID += 1
+
+    def use(self, player):
+        print('You used', self.name)
+        if self.name == 'key':
+            player.newlevel = 0
+            player.dimensionnumber += 1
+            player.dimension = self.dimensions[player.dimensionnumber]
+            print(
+                "You turn the key in the air and...  WHOOSH!  You are in another dimension..."
+            )
+        if self.name == 'healthtomb':
+            addhealth = round(
+                player.HPlimit / 3
+            )  # determine how much health will be gained to prevent overflowing
+            if player.HP + addhealth > player.HPlimit:
+                player.HP = player.HPlimit
+            else:
+                player.HP += addhealth
+        if self.name == 'healthpotion':
+            addhealth = round(
+                player.HPlimit / 4, 1
+            )  # determine how much health will be gained to prevent overflowing
+            if player.HP + addhealth > player.HPlimit:
+                player.HP = player.HPlimit
+            else:
+                player.HP += addhealth
+        if self.name == 'potion':
+            for a in player.effectlist:
+                player.effectlist.remove(a)
+        if self.name == 'superpotion':
+            addhealth = round(player.HPlimit / 4)
+            if player.HP + addhealth > player.HPlimit:
+                player.HP = player.HPlimit
+            else:
+                player.HP += addhealth
+            for a in player.effectlist:
+                player.effectlist.remove(a)
+        if self.name == 'snakehair':
+            Medusa = Enemy('Medusa', [
+                Attack('slash', 2.5, 'None'),
+                Attack('bite', 1.5, 'poison'),
+                Attack('bash', 3, 'None')
+            ], 25, ['armor of Paul Revere', 'poison fang', 'cursed flames'])
+            enemy = Medusa
+            ran = player.attack(Medusa)
+            if enemy.HP > 0.1:
+                sleep(1)
+                enemy.attack(player, ran)
+            if enemy.HP < 0.1:
+                enemy.drop(player)
+                monsterskilled += 1
+
+
 # Only ever going to be used for a player.
 class Person:
     # initiate
-    def __init__(self, HP, attacks, HPlimit):
+    def __init__(
+            self,
+            HP,
+            attacks,
+            HPlimit,
+            level=0,
+            effectlist=[],
+            items={
+                1: Item('healthpotion'),
+                2: Item('healthpotion'),
+                3: Item('healthpotion'),
+                4: Item('potion'),
+                5: Item('potion'),
+                6: Item('potion')
+            },
+            dimension='Normal',
+            dimensionnumber=0):
         self.HP = HP
         self.attacks = attacks
         self.HPlimit = HPlimit
         self.waited = False
         self.effect = "None"
-        self.level = 0
-        self.effectlist = []
-        lst = []
-        for a in range(0, 3):
-            lst.append(Item('healthpotion'))
-        for a in range(0, 3):
-            lst.append(Item('potion'))
-        self.items = {}
-        for a in lst:
-            self.items[a.ID] = a
-        self.dimension = "Normal"
-        self.dimensionnumber = 0
+        self.level = level
+        self.effectlist = effectlist
+        self.items = items
+        self.dimension = dimension
+        self.dimensionnumber = dimensionnumber
+
     # this is the attack section
     def attack(self, currentenemy):
         # check for effects
@@ -32,7 +111,7 @@ class Person:
             currentenemy.HP -= 2
             self.effect = 'None'
         if 'heal' in self.effectlist:
-            currentenemy.HP += 0.5
+            currentenemy.HP += 1
             self.effect = 'None'
         if 'fire' in self.effectlist:
             self.HP -= 1
@@ -42,6 +121,8 @@ class Person:
             self.HP -= 2
         import random
         # Ask for what to do?
+        if self.HP < 0.1:
+            return False
         print("What would you like to do(Attack, Use, Wait, or Flee)?")
         print("You have", self.HP, "HP. ", currentenemy.name, "has",
               currentenemy.HP, "HP.")
@@ -78,9 +159,8 @@ class Person:
             whattodo = input()
             for a in self.items:
                 if self.items.get(a).name == whattodo:
-                    self.items.get(a).use(self
-                    )
-                    del(self.items[a])
+                    self.items.get(a).use(self)
+                    del (self.items[a])
                     break
             if whattodo == 'wait':
                 print("You wait for", currentenemy.name,
@@ -95,6 +175,7 @@ class Person:
                     # variable "run"
                     return True
             return False
+
     # Function for in between levels
     def between(player, obj):
         print("What would you like to do while you're safe?")
@@ -133,7 +214,7 @@ class Person:
                 for a in player.items:
                     if player.items.get(a).name == whattodo:
                         player.items.get(a).use(player)
-                        del(player.items[a])
+                        del (player.items[a])
                         break
             if whattodo == "m4k3":
                 #also cheat code
@@ -146,7 +227,77 @@ class Person:
                         randomenemy.drop(player)
                 except ValueError:
                     print("try again...")
-        return player.level + 1, player.dimension
+            if whattodo == 'load':
+                from ast import literal_eval
+                print("Paste code onto screen:")
+                code = []
+                for a in range(0, 8):
+                    code.append(input())
+
+                def function_reader(a):
+                    x = 0
+                    for b in a:
+                        if b == "(":
+                            parameter_begin = x
+                        if b == ")":
+                            parameter_end = x
+                    return a[parameter_begin + 1:parameter_end]
+
+                def further_reader(a):
+                    lst = a.split(',')
+                    x = lst[0]
+                    y = int(lst[1])
+                    z = lst[2]
+                    return x, y, z
+
+                HP = int(code[0])
+                attacks = {}
+                dictionary = literal_eval(code[1])
+                for a in dictionary:
+                    b = function_reader(dictionary.get(a))
+                    attacks[a] = Attack(further_reader(b))
+                HPlimit = int(code[2])
+                level = int(code[3])
+                effectlist = code[4]
+                items = code[5]
+                dimension = code[6]
+                dimensionnumber = int(code[7])
+                player = Person(HP, attacks, HPlimit, level, effectlist, items,
+                                dimension, dimensionnumber)
+                print(type(code))
+            if whattodo == 'save':
+                code = []
+                lst = {}
+                for a in player.attacks:
+                    b = player.attacks.get(a)
+                    sttr = 'Attack('
+                    sttr += str(b.name)
+                    sttr += ','
+                    sttr += str(b.damage)
+                    sttr += ','
+                    sttr += str(b.effect)
+                    sttr += ')'
+                    lst[b.name] = sttr
+                attacks = lst
+                lst = {}
+                for a in player.items:
+                    b = player.items.get(a)
+                    sttr = 'Item('
+                    sttr += str(b.name)
+                    sttr += ')'
+                    lst[b.ID] = sttr
+                items = lst
+                code.append(player.HP)
+                code.append(attacks)
+                code.append(player.HPlimit)
+                code.append(player.level)
+                code.append(player.effectlist)
+                code.append(items)
+                code.append(player.dimension)
+                code.append(player.dimensionnumber)
+                for a in code:
+                    print(a)
+        return player.level + 1, player.dimension, player
 
 
 # Attack class
@@ -155,15 +306,6 @@ class Attack:
         self.name = name
         self.damage = damage
         self.effect = effect
-
-
-class universal:
-    def __init___(self, ID):  #add any universal variables here
-        self.id = ID
-
-
-universal = universal()
-universal.ID = 1
 
 
 # enemies
@@ -175,6 +317,7 @@ class Enemy:
         self.drops = drops
         self.effectlist = effectlist
         self.HPlimit = HP
+
     def attack(self, currentperson, ran):
         # check for effects
         if 'electricity' in self.effectlist:
@@ -220,6 +363,7 @@ class Enemy:
                 else:
                     self.effectlist.remove('shield')
                     print("But you blocked the attack!")
+
     def drop(self, currentperson, drop=''):
         if drop == '':
             drop = random.choice(self.drops)
@@ -324,6 +468,11 @@ class Enemy:
             if drop == 'instakill':
                 instakill = Attack('kill', 1000, 'cursed fire')
                 currentperson.attacks['kill'] = instakill
+            if drop == 'shield':
+                shield = Attack('shield', 0, 'shield')
+                currentperson.attacks['shield'] = shield
+
+
 #=================================ITEMS==================================================================================#
             if drop == 'healthpotion':
                 healthpotion = Item('healthpotion')
@@ -337,61 +486,20 @@ class Enemy:
             if drop == 'superpotion':
                 superpotion = Item('superpotion')
                 currentperson.items[superpotion.ID] = superpotion
+            if drop == 'snakehair':
+                snakehair = Item('snakehair')
+                currentperson.items[snakehair.ID] = snakehair
             print(self.name, "dropped", drop, ".")
         except NameError:
             print(self.name, "dropped nothing.")
 
-class Item:
-    def __init__(self, name, dimensions=["Normal", "Evil"]):
-        self.name = name
-        if name == 'key':
-            self.dimensions = dimensions
-        self.ID = universal.ID
-        universal.ID += 1
-    def use(self, player):
-        print('You used', self.name)
-        if self.name == 'key':
-            player.newlevel = 0
-            player.dimensionnumber += 1
-            player.dimension = self.dimensions[player.dimensionnumber]
-            print(
-                "You turn the key in the air and...  WHOOSH!  You are in another dimension..."
-            )
-        if self.name == 'healthtomb':
-            addhealth = round(
-                player.HPlimit / 3
-            )  # determine how much health will be gained to prevent overflowing
-            if player.HP + addhealth > player.HPlimit:
-                player.HP = player.HPlimit
-            else:
-                player.HP += addhealth
-        if self.name == 'healthpotion':
-            addhealth = round(
-                player.HPlimit / 4,
-                1
-            )  # determine how much health will be gained to prevent overflowing
-            if player.HP + addhealth > player.HPlimit:
-                player.HP = player.HPlimit
-            else:
-                player.HP += addhealth
-        if self.name == 'potion':
-            for a in player.effectlist:
-                player.effectlist.remove(a)
-        if self.name == 'superpotion':
-            addhealth = round(player.HPlimit/4)
-            if player.HP + addhealth > player.HPlimit:
-                player.HP = player.HPlimit
-            else:
-                player.HP += addhealth
-            for a in player.effectlist:
-                player.effectlist.remove(a)
 
-
-def DungeonLife():
-    player = Person(10, {
-        'stick': Attack('stick', 1.5, 'None'),
-        'fire': Attack('fire', 2.5, 'fire')
-    }, 10)
+def DungeonLife(
+        player=Person(10, {
+            'stick': Attack('stick', 1.5, 'None'),
+            'fire': Attack('fire', 2.5, 'fire')
+        }, 10),
+        done=False):
     from time import sleep
     import random
     monsterskilled = 0
@@ -412,14 +520,15 @@ def DungeonLife():
     snapeminion = Enemy("Snape's minion",
                         [Attack("Avada Kedavra", 10, 'None')], 10,
                         ['healthpotion', 'cursed flames'], [])
-    skeleton = Enemy('skeleton',
-                     [Attack('claw', 5, 'None'),
-                      Attack('shoot', 7.5, 'Heal')], 15, [
-                          'sword', 'sword', 'sparks', 'sparks', 'sparks',
-                          'healthpotion', 'healthpotion', 'healthpotion',
-                          'healthpotion', 'potion', 'potion', 'potion'
-                      ], [])
-    livingjaw = Enemy('living jaw', [Attack('bite', 7.5, 'poison')], 10,
+    skeleton = Enemy(
+        'skeleton', [Attack('claw', 3, 'None'),
+                     Attack('shoot', 1, 'Heal')], 15,
+        [
+            'sword', 'sword', 'sparks', 'sparks', 'sparks', 'healthpotion',
+            'healthpotion', 'healthpotion', 'healthpotion', 'potion', 'potion',
+            'potion', 'shield', 'shield', 'shield', 'snakehair', 'snakehair'
+        ], [])
+    livingjaw = Enemy('living jaw', [Attack('bite', 2, 'poison')], 10,
                       ['healthpotion'], [])
     rock = Enemy('Giant Rock',
                  [Attack('smash', 5, 'None'),
@@ -427,55 +536,143 @@ def DungeonLife():
                       'healthpotion', 'healthpotion', 'healthpotion',
                       'rock club', 'rock armor', 'potion', 'potion', 'potion'
                   ], [])
-    eye = Enemy(
-                "Eye",
+    eye = Enemy("Eye",
                 [Attack('stare', 10, 'None'),
                  Attack('look', 5, 'sheild')], 40, [
-                     'superpotion', 'superpotion', 'superpotion',
-                     'evil armor', 'blade of night'
-                ], [])
+                     'superpotion', 'superpotion', 'superpotion', 'evil armor',
+                     'blade of night'
+                 ], [])
     deathsoul = Enemy(
-                "Death Soul",
-                [Attack('search', 10, 'heal'),
-                Attack('assault', 50, 'cursed fire')
-                ], 20, ['superpotion', 'evil armor', 'blade of night'], [])
+        "Death Soul",
+        [Attack('search', 10, 'heal'),
+         Attack('assault', 25, 'cursed fire')], 20,
+        ['superpotion', 'evil armor', 'blade of night'], [])
     # Start game
     enemies = [snake, snake, snake, spider, spider]
-    print("You wake up in a dungeon, feeling nautious.")
-    sleep(1)
-    print("You notice you have a stick strapped to your back.")
-    sleep(1)
-    print(
-        "You also realize you can create fire and you have 5 health potions.")
-    sleep(1)
-    print("You feel the urge to move up, towards the sky!")
-    sleep(1)
-    print("Good luck, hero!")
-    done = False
+    if not done:
+        print("You wake up in a dungeon, feeling nautious.")
+        sleep(1)
+        print("You notice you have a stick strapped to your back.")
+        sleep(1)
+        print("You also realize you can create fire.")
+        sleep(1)
+        print("You feel the urge to move up, towards the sky!")
+        sleep(1)
+        print("Good luck, hero!")
+        done = False
+        player.items = {
+            1: Item('healthpotion'),
+            2: Item('healthpotion'),
+            3: Item('healthpotion'),
+            4: Item('potion'),
+            5: Item('potion'),
+            6: Item('potion')
+        }
+        sleep(1)
+        print("Hello!  I'm your trainer!")
+        sleep(1)
+        print(
+            "I'm here to help you along your way, but make it snappy!  I have other people to get to."
+        )
+        sleep(1)
+        print("Snake jumps out at you!")
+        print("What do you want to do?(Wait, Use, Attack, or Flee?")
+        print("Snake has 5 HP.  You have 10 HP.")
+        sleep(1)
+        print("You have health, so why don't you attack?")
+        print("Type in 'attack' to attack")
+        while not input().lower() == 'attack':
+            continue
+        print("fire")
+        print("stick")
+        sleep(1)
+        print(
+            "Fire sounds like a good attack, probably better than stick, so let's use that."
+        )
+        sleep(1)
+        print("Type in 'fire.'")
+        while not input().lower() == 'fire':
+            continue
+        print("You use fire, doing 2.5 damage and fire effect.")
+        print("Snake uses spit, doing 1 damage and None effect.")
+        print("What do you want to do?(Wait, Use, Attack, or Flee?")
+        print("Snake has 1.5 HP.  You have 9 HP.")
+        sleep(1)
+        print(
+            "Hey, look! ^  Snake is on fire, so he takes 1 damage every turn!")
+        print("There are other effects that are different in every way.")
+        sleep(2.5)
+        print("Let's finish Snake off!  Attack with fire.")
+        while not input().lower() == 'attack':
+            continue
+        print("stick")
+        print("fire")
+        while not input().lower() == 'fire':
+            continue
+        print("You use fire, doing 2.5 damage and fire effect.")
+        print("Snake dropped healthpotion.")
+        sleep(2.5)
+        print("We did it!")
+        print("What would you like to do while you're safe?")
+        sleep(2.5)
+        print("Type in 'show' to see how you're doing.")
+        while not input().lower() == 'show':
+            continue
+        print("HP: 8/10")
+        print("effects:")
+        print("poison")
+        print("items:")
+        print("potion")
+        print("attacks:")
+        print("stick")
+        print("fire")
+        sleep(2.5)
+        print(
+            "Oh no!  You're poisoned, so you are going to take 2 damage per turn until you use a potion!"
+        )
+        print("Type in 'use' to get to the 'use' menu.")
+        while not input().lower() == 'use':
+            continue
+        print("potion")
+        sleep(1)
+        print("Now type in 'potion' to use it.")
+        while not input().lower() == 'potion':
+            continue
+        print("You used, potion.")
+        sleep(1)
+        print(
+            "OK.  You shouldn't have poison now.  I'm going to go, because I have other adventurers to get to."
+        )
+        sleep(1)
+        print("Now type in 'leave' to leave the safe area.")
+        while not input().lower() == 'leave':
+            continue
+        print(
+            "Here are some  healthpotions and potions that will help you along the way."
+        )
+        sleep(1.75)
+        print("I've healed you all the way up.")
+        sleep(3)
+        print(
+            "Good luck, hero.....  and remember, the past is not what you think."
+        )
+        sleep(3)
+        print(
+            "(YOU): While pondering the message of the random voice, you head onward."
+        )
     while player.HP > 0.1:
         if player.dimension == "Evil" and not done:
-            eye = Enemy(
-                "Eye",
-                [Attack('stare', 10, 'None'),
-                 Attack('look', 5, 'sheild')], 40, [
-                     'superpotion', 'superpotion', 'superpotion',
-                     'evil armor', 'blade of night'
-                 ], [])
-            deathsoul = Enemy("Death Soul", [
-                Attack('search', 10, 'heal'),
-                Attack('assault', 50, 'cursed fire')
-            ], 20, ['superpotion', 'evil armor', 'blade of night'], [])
             enemies = [eye, eye, eye, eye, eye, deathsoul, deathsoul]
             done = True
         sleep(1)
-        player.level, player.dimension = player.between(player)
+        player.level, player.dimension, player = player.between(player)
         sleep(2.5)
         enemy = random.choice(enemies)
         print(enemy.name, "jumps out at you!")
         while player.HP > 0.1 and enemy.HP > 0.1:
             sleep(1)
             ran = player.attack(enemy)
-            if enemy.HP > 0.1:
+            if enemy.HP > 0.1 and player.HP > 0.1:
                 sleep(1)
                 enemy.attack(player, ran)
         # drop system
@@ -500,9 +697,9 @@ def DungeonLife():
             )
             # Medusa battle begins.
             Medusa = Enemy('Medusa', [
-                Attack('slash', 5, 'None'),
-                Attack('bite', 2.5, 'poison'),
-                Attack('bash', 7.5, 'None')
+                Attack('slash', 2.5, 'None'),
+                Attack('bite', 1.5, 'poison'),
+                Attack('bash', 3, 'None')
             ], 25, ['armor of Paul Revere', 'poison fang', 'cursed flames'],
                            [])
             while player.HP > 0.1 and Medusa.HP > 0.1:
@@ -536,8 +733,8 @@ def DungeonLife():
                 "But before you can investigate further, Snape fires something at you!"
             )
             Snape = Enemy('Snape', [
-                Attack('magic flames', 5, 'cursed fire'),
-                Attack('Avada Kedavra', 10, 'None')
+                Attack('magic flames', 3, 'cursed fire'),
+                Attack('Avada Kedavra', 7.5, 'None')
             ], 25, ['orc armor', "Snape's wand"], [])
             while player.HP > 0.1 and Snape.HP > 0.1:
                 player.attack(Snape)
@@ -548,7 +745,12 @@ def DungeonLife():
                 print("You unlocked new baddies!")
                 sleep(1)
                 print("Snape's minion unlocked!")
-                enemies.append(snapeminion)
+                enemies = [
+                    skeleton, skeleton, skeleton, skeleton, skeleton,
+                    livingjaw, livingjaw, livingjaw, snake, snake, snake,
+                    spider, spider, snapeminion, snapeminion, snapeminion,
+                    snapeminion, snapeminion
+                ]
         #refill health for enemies
         for a in enemies:
             a.HP = a.HPlimit
@@ -749,10 +951,42 @@ def DungeonLife():
                     "If you would like to continue across dimensions, the game will continue in 25 secs."
                 )
                 sleep(25)
+        if player.level > 15:
+            enemies = [
+                skeleton, skeleton, skeleton, skeleton, skeleton, livingjaw,
+                livingjaw, livingjaw, snake, snake, snake, spider, spider
+            ]
+        if player.level > 30:
+            enemies = [
+                skeleton, skeleton, skeleton, skeleton, skeleton, livingjaw,
+                livingjaw, livingjaw, snake, snake, snake, spider, spider,
+                snapeminion, snapeminion, snapeminion, snapeminion, snapeminion
+            ]
+        if player.level > 45:
+            enemies = [
+                snake, spider, skeleton, skeleton, livingjaw, livingjaw,
+                livingjaw, snapeminion, snapeminion, snapeminion, snapeminion,
+                rock, rock, rock, rock, rock
+            ]
     # endgame
     print("You died...")
     print("You killed", monsterskilled, "monsters.")
     print("You got to level", player.level, ".")
+    sleep(3)
+    print("Continue? Y/N")
+    whattodo = input()
+    while True:
+        if whattodo == 'Y':
+            if player.level < 5:
+                player.level = 5
+            DungeonLife(
+                Person(player.HPlimit, player.attacks, player.HPlimit,
+                       (player.level - 5), [], player.items, player.dimension,
+                       player.dimensionnumber), True)
+        elif whattodo == 'N':
+            break
+        else:
+            print("Please input Y or N.")
 
 
 # initiate
