@@ -235,18 +235,12 @@ class Person:
                     code.append(input())
 
                 def function_reader(a):
-                    x = 0
-                    for b in a:
-                        if b == "(":
-                            parameter_begin = x
-                        if b == ")":
-                            parameter_end = x
-                    return a[parameter_begin + 1:parameter_end]
+                    return a[7:len(a)-1]
 
                 def further_reader(a):
                     lst = a.split(',')
                     x = lst[0]
-                    y = int(lst[1])
+                    y = float(lst[1])
                     z = lst[2]
                     return x, y, z
 
@@ -255,7 +249,8 @@ class Person:
                 dictionary = literal_eval(code[1])
                 for a in dictionary:
                     b = function_reader(dictionary.get(a))
-                    attacks[a] = Attack(further_reader(b))
+                    x, y, z = further_reader(b)
+                    attacks[a] = Attack(x, y, z)
                 HPlimit = int(code[2])
                 level = int(code[3])
                 effectlist = code[4]
@@ -264,7 +259,6 @@ class Person:
                 dimensionnumber = int(code[7])
                 player = Person(HP, attacks, HPlimit, level, effectlist, items,
                                 dimension, dimensionnumber)
-                print(type(code))
             if whattodo == 'save':
                 code = []
                 lst = {}
@@ -499,7 +493,7 @@ def DungeonLife(
             'stick': Attack('stick', 1.5, 'None'),
             'fire': Attack('fire', 2.5, 'fire')
         }, 10),
-        done=False):
+        done=True):
     from time import sleep
     import random
     monsterskilled = 0
