@@ -493,7 +493,7 @@ def DungeonLife(
             'stick': Attack('stick', 1.5, 'None'),
             'fire': Attack('fire', 2.5, 'fire')
         }, 10),
-        done=True):
+        done=False):
     from time import sleep
     import random
     monsterskilled = 0
