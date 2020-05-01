@@ -544,14 +544,18 @@ def DungeonLife(
         sleep(1)
         print("Good luck, hero!")
         done = False
-        player.items = {
-            1: Item('healthpotion'),
-            2: Item('healthpotion'),
-            3: Item('healthpotion'),
-            4: Item('potion'),
-            5: Item('potion'),
-            6: Item('potion')
-        }
+        while True:
+            inp = input("Would you like to do the tutorial? (Y/N):")
+            if inp == 'N':
+                done = True
+                break
+            elif inp == 'Y':
+                done = False
+                break
+            else:
+                print("Please input Y or N.")
+        if done:
+            DungeonLife(player, True)
         sleep(1)
         print("Hello!  I'm your trainer!")
         sleep(1)
