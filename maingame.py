@@ -19,7 +19,6 @@ class Item:
             self.dimensions = dimensions
         self.ID = universal.ID
         universal.ID += 1
-
     def use(self, player):
         print('You used', self.name)
         if self.name == 'key':
@@ -104,8 +103,8 @@ class Person:
         self.items = items
         self.dimension = dimension
         self.dimensionnumber = dimensionnumber
-        from tokenize import tokenize
 
+        from tokenize import tokenize
     # this is the attack section
     def attack(self, currentenemy):
         # check for effects
@@ -246,17 +245,14 @@ class Person:
                 code = []
                 for a in range(0, 8):
                     code.append(input())
-
                 def function_reader(a):
                     return a[7:len(a) - 1]
-
                 def further_reader(a):
                     lst = a.split(',')
                     x = lst[0]
                     y = float(lst[1])
                     z = lst[2]
                     return x, y, z
-
                 HP = int(code[0])
                 attacks = {}
                 dictionary = literal_eval(code[1])
@@ -496,8 +492,6 @@ class Enemy:
                 currentperson.attacks['hug'] = hug
             if drop == "Bucket o' Sludge":
                 bucket = Attack("Bucket o' Sludge", )
-
-
 #=================================ITEMS==================================================================================#
             if drop == 'healthpotion':
                 healthpotion = Item('healthpotion')
@@ -713,6 +707,7 @@ def DungeonLife(
             sleep(1)
             ran = player.attack(enemy)
             if enemy.HP > 0.1 and player.HP > 0.1 and not ran:
+
                 sleep(1)
                 enemy.attack(player, ran)
             elif ran:
