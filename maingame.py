@@ -45,6 +45,7 @@ class Item:
                 player.HP = player.HPlimit
             else:
                 player.HP += addhealth
+            print("HP:", player.HP)
         if self.name == 'potion':
             for a in player.effectlist:
                 player.effectlist.remove(a)
@@ -63,10 +64,11 @@ class Item:
                 Attack('bash', 3, 'None')
             ], 25, ['armor of Paul Revere', 'poison fang', 'cursed flames'])
             enemy = Medusa
-            ran = player.attack(Medusa)
-            if enemy.HP > 0.1:
-                sleep(1)
-                enemy.attack(player, ran)
+            while not enemy.HP < 0.1 and not player.HP < 0.1:
+                ran = player.attack(Medusa)
+                if enemy.HP > 0.1:
+                    sleep(1)
+                    enemy.attack(player, ran)
             if enemy.HP < 0.1:
                 enemy.drop(player)
                 monsterskilled += 1
@@ -102,6 +104,7 @@ class Person:
         self.items = items
         self.dimension = dimension
         self.dimensionnumber = dimensionnumber
+        from tokenize import tokenize
 
     # this is the attack section
     def attack(self, currentenemy):
@@ -126,55 +129,65 @@ class Person:
         print("What would you like to do(Attack, Use, Wait, or Flee)?")
         print("You have", self.HP, "HP. ", currentenemy.name, "has",
               currentenemy.HP, "HP.")
-        whattodo = input().lower()
         # Attack process
-        if whattodo == 'attack':
-            print("What attack would you like to use?")
-            # print out available attacks
-            leave = False
-            while not leave:
-                for a in self.attacks:
-                    print(a)
-                attack = input()
-                # deal damage
-                for a in self.attacks:
-                    if a == attack:
-                        leave = True
-                        print("You use", a, "doing",
-                              self.attacks.get(a).damage, "damage.  It has",
-                              self.attacks.get(a).effect, "effect.")
-                        if not 'shield' in self.effectlist:
-                            currentenemy.HP -= self.attacks.get(attack).damage
-                            currentenemy.effectlist.append(
-                                self.attacks.get(attack).effect)
+        leave4 = False
+        while not leave4:
+            whattodo = input().lower()
+            if whattodo == 'attack':
+                print("What attack would you like to use?")
+                # print out available attacks
+                leave = False
+                while not leave:
+                    for a in self.attacks:
+                        print(a)
+                    attack = input()
+                    # deal damage
+                    for a in self.attacks:
+                        if a == attack:
                             leave = True
-                        else:
-                            self.effectlist.remove('shield')
-                            print("You were blocked!")
+                            print("You use", a, "doing",
+                                  self.attacks.get(a).damage,
+                                  "damage.  It has",
+                                  self.attacks.get(a).effect, "effect.")
+                            if not 'shield' in self.effectlist:
+                                currentenemy.HP -= self.attacks.get(
+                                    attack).damage
+                                currentenemy.effectlist.append(
+                                    self.attacks.get(attack).effect)
+                                leave = True
+                            else:
+                                self.effectlist.remove('shield')
+                                print("You were blocked!")
+                leave4 = True
             # Healing section
-        if whattodo == "use":
-            print("You can use:")
-            for a in self.items:
-                print(self.items.get(a).name)
-            whattodo = input()
-            for a in self.items:
-                if self.items.get(a).name == whattodo:
-                    self.items.get(a).use(self)
-                    del (self.items[a])
-                    break
-            if whattodo == 'wait':
+            elif whattodo == "use":
+                print("You can use:")
+                for a in self.items:
+                    print(self.items.get(a).name)
+                whattodo = input()
+                for a in self.items:
+                    if self.items.get(a).name == whattodo:
+                        self.items.get(a).use(self)
+                        del (self.items[a])
+                        break
+                leave4 = True
+            elif whattodo == 'wait':
                 print("You wait for", currentenemy.name,
                       "'s attack, hoping to dodge it.")
                 self.waited = True
-            if whattodo == 'flee':
-                dice = [1, 2]
+                leave4 = True
+            elif whattodo == 'flee':
+                dice = [1, 1, 1, 2]
                 import random
                 diceroll = random.choice(dice)
                 if diceroll == 1:
                     print("You run away, your feet flying.")
                     # variable "run"
                     return True
-            return False
+                leave4 = True
+            else:
+                print("Please type in attack, use, wait, or flee.")
+        return False
 
     # Function for in between levels
     def between(player, obj):
@@ -184,7 +197,7 @@ class Person:
             whattodo = input().lower()
             if whattodo == "leave":
                 leave = True
-            if whattodo == 'show':
+            elif whattodo == 'show':
                 print("HP:", player.HP, "/", player.HPlimit)
                 print("level:", player.level)
                 print("dimension:", player.dimension)
@@ -197,7 +210,7 @@ class Person:
                 print("attacks:")
                 for a in player.attacks:
                     print(a)
-            if whattodo == 'l3v3l':
+            elif whattodo == 'l3v3l':
                 # cheat code
                 leave3 = False
                 while not leave3:
@@ -206,7 +219,7 @@ class Person:
                     except ValueError:
                         continue
                     leave3 = True
-            if whattodo == "use":
+            elif whattodo == "use":
                 print("You can use:")
                 for a in player.items:
                     print(player.items.get(a).name)
@@ -216,7 +229,7 @@ class Person:
                         player.items.get(a).use(player)
                         del (player.items[a])
                         break
-            if whattodo == "m4k3":
+            elif whattodo == "m4k3":
                 #also cheat code
                 leave3 = False
                 print("drop (as documented in code):")
@@ -227,7 +240,7 @@ class Person:
                         randomenemy.drop(player)
                 except ValueError:
                     print("try again...")
-            if whattodo == 'load':
+            elif whattodo == 'load':
                 from ast import literal_eval
                 print("Paste code onto screen:")
                 code = []
@@ -235,7 +248,7 @@ class Person:
                     code.append(input())
 
                 def function_reader(a):
-                    return a[7:len(a)-1]
+                    return a[7:len(a) - 1]
 
                 def further_reader(a):
                     lst = a.split(',')
@@ -259,7 +272,7 @@ class Person:
                 dimensionnumber = int(code[7])
                 player = Person(HP, attacks, HPlimit, level, effectlist, items,
                                 dimension, dimensionnumber)
-            if whattodo == 'save':
+            elif whattodo == 'save':
                 code = []
                 lst = {}
                 for a in player.attacks:
@@ -291,6 +304,12 @@ class Person:
                 code.append(player.dimensionnumber)
                 for a in code:
                     print(a)
+            elif whattodo == "trash":
+                print("Which attack?")
+                del (player.attacks[input()])
+                print("Trashed!")
+            else:
+                print("Please input show, use, leave, save, or load.")
         return player.level + 1, player.dimension, player
 
 
@@ -329,7 +348,7 @@ class Enemy:
             self.HP -= 2
         # attack the player
         attack = random.choice(self.attacks)
-        if currentperson.waited != True:
+        if not currentperson.waited:
             print(self.name, "used", attack.name, "doing", attack.damage,
                   "damage.  It has", attack.effect, "effect.")
             if not 'shield' in self.effectlist:
@@ -340,13 +359,13 @@ class Enemy:
             else:
                 self.effectlist.remove('shield')
                 print("But you blocked the attack!")
-        else:
-            dice = [1, 2]
+        if currentperson.waited:
+            dice = [1, 1, 1, 2]
             diceroll = random.choice(dice)
             if diceroll == 1:
                 print(self.name, "missed you while trying to do", attack.name,
                       ".")
-            else:
+            elif diceroll == 2:
                 print(self.name, "used", attack.name, "doing", attack.damage,
                       "damage.  It has", attack.effect, "effect.")
                 if not 'shield' in self.effectlist:
@@ -413,6 +432,13 @@ class Enemy:
                     currentperson.HPlimit = 120
                     currentperson.HP = currentperson.HPlimit
                     currentperson.HP -= oldHPlimit - oldHP
+            if drop == 'slime armor':
+                if currentperson.HPlimit < 175:
+                    oldHPlimit = currentperson.HPlimit
+                    oldHP = currentperson.HP
+                    currentperson.HPlimit = 175
+                    currentperson.HP = currentperson.HPlimit
+                    currentperson.HP -= oldHPlimit - oldHP
             if drop == 'super armor':
                 if currentperson.HPlimit < 1000:
                     oldHPlimit = currentperson.HPlimit
@@ -465,6 +491,11 @@ class Enemy:
             if drop == 'shield':
                 shield = Attack('shield', 0, 'shield')
                 currentperson.attacks['shield'] = shield
+            if drop == 'Hugging Friend':
+                hug = Attack('hug', 12, 'heal')
+                currentperson.attacks['hug'] = hug
+            if drop == "Bucket o' Sludge":
+                bucket = Attack("Bucket o' Sludge", )
 
 
 #=================================ITEMS==================================================================================#
@@ -539,10 +570,13 @@ def DungeonLife(
     deathsoul = Enemy(
         "Death Soul",
         [Attack('search', 10, 'heal'),
-         Attack('assault', 25, 'cursed fire')], 20,
+         Attack('assault', 15, 'cursed fire')], 20,
         ['superpotion', 'evil armor', 'blade of night'], [])
+    slime = Enemy('Slime', [Attack('Hug', 12.5, 'heal')], 25,
+                  ["Bucket o' Sludge", "Hugging Friend"], [])
     # Start game
     enemies = [snake, snake, snake, spider, spider]
+    #================================TUTORIAL===================================================#
     if not done:
         print("You wake up in a dungeon, feeling nautious.")
         sleep(1)
@@ -554,14 +588,18 @@ def DungeonLife(
         sleep(1)
         print("Good luck, hero!")
         done = False
-        player.items = {
-            1: Item('healthpotion'),
-            2: Item('healthpotion'),
-            3: Item('healthpotion'),
-            4: Item('potion'),
-            5: Item('potion'),
-            6: Item('potion')
-        }
+        while True:
+            inp = input("Would you like to do the tutorial? (Y/N):")
+            if inp == 'N':
+                done = True
+                break
+            elif inp == 'Y':
+                done = False
+                break
+            else:
+                print("Please input Y or N.")
+        if done:
+            DungeonLife(player, True)
         sleep(1)
         print("Hello!  I'm your trainer!")
         sleep(1)
@@ -576,6 +614,7 @@ def DungeonLife(
         print("You have health, so why don't you attack?")
         print("Type in 'attack' to attack")
         while not input().lower() == 'attack':
+            print("please type in the correct word.")
             continue
         print("fire")
         print("stick")
@@ -586,6 +625,7 @@ def DungeonLife(
         sleep(1)
         print("Type in 'fire.'")
         while not input().lower() == 'fire':
+            print("please type in the correct word.")
             continue
         print("You use fire, doing 2.5 damage and fire effect.")
         print("Snake uses spit, doing 1 damage and None effect.")
@@ -598,10 +638,12 @@ def DungeonLife(
         sleep(2.5)
         print("Let's finish Snake off!  Attack with fire.")
         while not input().lower() == 'attack':
+            print("please type in the correct word.")
             continue
         print("stick")
         print("fire")
         while not input().lower() == 'fire':
+            print("please type in the correct word.")
             continue
         print("You use fire, doing 2.5 damage and fire effect.")
         print("Snake dropped healthpotion.")
@@ -611,6 +653,7 @@ def DungeonLife(
         sleep(2.5)
         print("Type in 'show' to see how you're doing.")
         while not input().lower() == 'show':
+            print("please input the correct word.")
             continue
         print("HP: 8/10")
         print("effects:")
@@ -626,11 +669,13 @@ def DungeonLife(
         )
         print("Type in 'use' to get to the 'use' menu.")
         while not input().lower() == 'use':
+            print("please type in the correct word.")
             continue
         print("potion")
         sleep(1)
         print("Now type in 'potion' to use it.")
         while not input().lower() == 'potion':
+            print("please type in the correct word.")
             continue
         print("You used, potion.")
         sleep(1)
@@ -640,6 +685,7 @@ def DungeonLife(
         sleep(1)
         print("Now type in 'leave' to leave the safe area.")
         while not input().lower() == 'leave':
+            print("please type in the correct word.")
             continue
         print(
             "Here are some  healthpotions and potions that will help you along the way."
@@ -654,10 +700,10 @@ def DungeonLife(
         print(
             "(YOU): While pondering the message of the random voice, you head onward."
         )
+#================================GAME START=================================================#
     while player.HP > 0.1:
-        if player.dimension == "Evil" and not done:
+        if player.dimension == "Evil":
             enemies = [eye, eye, eye, eye, eye, deathsoul, deathsoul]
-            done = True
         sleep(1)
         player.level, player.dimension, player = player.between(player)
         sleep(2.5)
@@ -666,9 +712,11 @@ def DungeonLife(
         while player.HP > 0.1 and enemy.HP > 0.1:
             sleep(1)
             ran = player.attack(enemy)
-            if enemy.HP > 0.1 and player.HP > 0.1:
+            if enemy.HP > 0.1 and player.HP > 0.1 and not ran:
                 sleep(1)
                 enemy.attack(player, ran)
+            elif ran:
+                break
         # drop system
         if enemy.HP < 0.1:
             enemy.drop(player)
@@ -676,7 +724,10 @@ def DungeonLife(
             for a in enemies:
                 enemies.remove(a)
                 enemies.append(a)
-        # Medusa boss battle
+        if player.dimension != "Normal":
+            newlevel += 1
+#========================================BOSSES (dim1)======================================#
+# Medusa boss battle
         if player.level == 15:
             print("You find a stone tablet bearing this message:")
             sleep(1)
@@ -981,6 +1032,22 @@ def DungeonLife(
             break
         else:
             print("Please input Y or N.")
+#========================================BOSSES (dim2)======================================#
+    if player.newlevel == 15:
+        Sludge = Enemy("Sludge", [
+            Attack("Bucket o' Sludge", 10, 'poison'),
+            Attack('Hug', 20, 'heal')
+        ], 50, ["Bucket o' Sludge", 'Slime Armor', 'Hugging Friend'], [])
+        while player.HP > 0.1 and Sludge.HP > 0.1:
+            ran = player.attack(Sludge)
+            if Sludge.HP > 0.1:
+                Medusa.attack(player, ran)
+            if Sludge.HP > 0.1:
+                # Rewards and unlocks
+                print("You unlocked new baddies!")
+                sleep(1)
+                print("Slime unlocked!")
+                enemies = [eye, eye, slime, slime, slime, deathsoul, deathsoul]
 
 
 # initiate
