@@ -1,12 +1,10 @@
-# DungeonLife Release!
-ITS FINALLY DONE!  ONE YEAR OF WORK!
-# A SPECIAL MESSAGE:
-Thank you to all my friends and family for helping this dream come true.  Also thank you to my main testers, Mrs. Weiners Wizard Whales 2018-19.  None of this would be possible without your and their support.
+# DungeonLife:
 ## Notes:
 New Schematics Have Been Added!
 SAVING:  Type in 'save' to get your code, copy it and then later load the game then type 'load'. After that, paste in your code and it will run like normal.
 NON-PERMANENT DEATH:  When you die, it is no longer permanent.  (Although it is suggested you save before you get sent 5 levels back!)
 TUTORIAL:  Now, you don't need me to explain the game!
+MINIBOSSES:  As you go on your way (after beating the game, of course), you will encounter baddies that are stronger than normal, but do not quite count as bosses.  These dimensional baddies are minibosses.  Have fun with the new loot.
 ### To play on Linux OS:
 1)Copy and paste maingame.py into python interpeter.  
 2)Have Fun!
@@ -15,10 +13,7 @@ TUTORIAL:  Now, you don't need me to explain the game!
 2)Open maingame.py with Notepad or other text application
 3)Copy and paste into python interpreter.  
 4)Have Fun! 
-
-
 ##### Currently:
-Release v2.1.0
-
+Sorry for the mistake, this is currently in 1.1.5.
 ### Instructions:
 Look at github wiki for instructions and commands.
